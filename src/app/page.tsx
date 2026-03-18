@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import QuestionInput from "@/components/QuestionInput";
 import PeopleSuggestions from "@/components/PeopleSuggestions";
 import AnswerPanel from "@/components/AnswerPanel";
-import DissentBubble from "@/components/DissentBubble";
 import { useQuestion } from "@/hooks/useQuestion";
 
 const exampleCards = [
@@ -109,7 +108,6 @@ export default function Home() {
     selectedPerson,
     answer,
     isStreaming,
-    dissent,
     error,
     messages,
     isFollowUpStreaming,
@@ -330,34 +328,6 @@ export default function Home() {
         </main>
       </div>
 
-      {/* Dissent bubble */}
-      {dissent && selectedPerson && dissent.dissenter.slug !== selectedPerson.slug && (
-        <DissentBubble
-          dissent={dissent}
-          onSelect={() => selectPerson(dissent.dissenter)}
-        />
-      )}
-
-      {/* Decorative SVG */}
-      <div style={{
-        position: "fixed",
-        bottom: "2rem",
-        right: "2rem",
-        opacity: 0.15,
-        pointerEvents: "none",
-        zIndex: 0,
-      }}>
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="120" style={{ stroke: "#2A3122", strokeWidth: 1, fill: "none" }}>
-          <path d="M50,90 C50,70 30,60 30,40 C30,25 40,15 50,15 C60,15 70,25 70,40 C70,60 50,70 50,90 Z" strokeDasharray="4 4" />
-          <circle cx="50" cy="15" r="3" fill="#2A3122" />
-          <circle cx="30" cy="40" r="2" fill="#2A3122" />
-          <circle cx="70" cy="40" r="2" fill="#2A3122" />
-          <path d="M30,40 C15,40 10,25 10,15" strokeDasharray="2 2" />
-          <circle cx="10" cy="15" r="1.5" fill="#2A3122" />
-          <path d="M70,40 C85,40 90,25 90,15" strokeDasharray="2 2" />
-          <circle cx="90" cy="15" r="1.5" fill="#2A3122" />
-        </svg>
-      </div>
     </div>
   );
 }
