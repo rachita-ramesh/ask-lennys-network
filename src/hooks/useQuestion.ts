@@ -56,6 +56,8 @@ export function useQuestion() {
 
   // Pre-fetched answers keyed by person slug
   const prefetchedAnswers = useRef<Map<string, string>>(new Map());
+  // Follow-up messages keyed by person slug
+  const messagesPerPerson = useRef<Map<string, Message[]>>(new Map());
   const latestAnswerRef = useRef("");
 
   const askQuestion = useCallback(async (q: string) => {
@@ -68,6 +70,7 @@ export function useQuestion() {
     setMessages([]);
     setAnswer("");
     prefetchedAnswers.current.clear();
+    messagesPerPerson.current.clear();
 
     try {
       const res = await fetch("/api/suggest-people", {
@@ -99,9 +102,19 @@ export function useQuestion() {
 
   const selectPerson = useCallback(
     async (person: Person) => {
+      // Save current person's messages before switching
+      setMessages((prev) => {
+        if (selectedPerson && prev.length > 0) {
+          messagesPerPerson.current.set(selectedPerson.slug, prev);
+        }
+        return prev;
+      });
+
       setSelectedPerson(person);
       setDissent(null);
-      setMessages([]);
+      // Restore target person's messages
+      const savedMessages = messagesPerPerson.current.get(person.slug) || [];
+      setMessages(savedMessages);
       latestAnswerRef.current = "";
 
       // Check if answer is already prefetched
@@ -182,6 +195,10 @@ export function useQuestion() {
           }
           updated.push({ role: "user", content: followUp });
           updated.push({ role: "assistant", content: followUpText });
+          // Persist to per-person map
+          if (selectedPerson) {
+            messagesPerPerson.current.set(selectedPerson.slug, updated);
+          }
           return updated;
         });
       } catch (err: any) {
@@ -207,6 +224,7 @@ export function useQuestion() {
     setMessages([]);
     setAnswer("");
     prefetchedAnswers.current.clear();
+    messagesPerPerson.current.clear();
   }, []);
 
   return {

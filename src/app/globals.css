@@ -81,6 +81,27 @@ input::placeholder {
 .delay-4 { animation-delay: 0.4s; }
 .delay-5 { animation-delay: 0.5s; }
 
+/* Markdown in assistant bubbles */
+.answer-markdown p {
+  margin-bottom: 0.75em;
+}
+.answer-markdown p:last-child {
+  margin-bottom: 0;
+}
+.answer-markdown strong {
+  font-weight: 600;
+}
+.answer-markdown em {
+  font-style: italic;
+}
+.answer-markdown ul, .answer-markdown ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+.answer-markdown li {
+  margin-bottom: 0.25em;
+}
+
 /* Streaming cursor */
 .streaming-cursor::after {
   content: "|";

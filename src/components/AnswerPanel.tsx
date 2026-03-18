@@ -1,9 +1,8 @@
 "use client";
 import { useState, FormEvent, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
 import { Person } from "@/lib/types";
 import { Message } from "@/hooks/useQuestion";
-import SourceQuote from "./SourceQuote";
-
 interface Props {
   person: Person;
   question: string;
@@ -15,48 +14,8 @@ interface Props {
   onAnswerUpdate?: (text: string) => void;
 }
 
-function parseAnswer(text: string): React.ReactNode[] {
-  const parts: React.ReactNode[] = [];
-  const regex = /<quote>([\s\S]*?)<\/quote>/g;
-  let lastIndex = 0;
-  let match;
-  let key = 0;
-
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(<span key={key++}>{text.slice(lastIndex, match.index)}</span>);
-    }
-    parts.push(<SourceQuote key={key++} quote={match[1]} />);
-    lastIndex = regex.lastIndex;
-  }
-
-  if (lastIndex < text.length) {
-    const remaining = text.slice(lastIndex);
-    const incompleteMatch = remaining.match(/<quote>([\s\S]*)$/);
-    if (incompleteMatch) {
-      const beforeTag = remaining.slice(0, incompleteMatch.index);
-      if (beforeTag) parts.push(<span key={key++}>{beforeTag}</span>);
-      parts.push(
-        <div key={key++} style={{
-          borderLeft: "3px solid #D45D48",
-          background: "rgba(212, 93, 72, 0.06)",
-          borderRadius: "0 8px 8px 0",
-          padding: "0.75rem 1rem",
-          margin: "0.75rem 0",
-        }}>
-          <p style={{
-            fontSize: "0.9rem", color: "#5F6854",
-            fontStyle: "italic", lineHeight: 1.6,
-            fontFamily: "var(--font-serif)",
-          }}>&ldquo;{incompleteMatch[1]}</p>
-        </div>
-      );
-    } else {
-      parts.push(<span key={key++}>{remaining}</span>);
-    }
-  }
-
-  return parts;
+function stripQuoteTags(text: string): string {
+  return text.replace(/<\/?quote>/g, "");
 }
 
 function avatarColor(name: string): string {
@@ -112,11 +71,10 @@ function AssistantBubble({ person, text, isStreaming }: { person: Person; text: 
         fontSize: "0.95rem",
         color: "#2A3122",
         lineHeight: 1.7,
-        whiteSpace: "pre-wrap",
         fontFamily: "var(--font-sans)",
       }}>
-        <div className={isStreaming ? "streaming-cursor" : ""}>
-          {text ? parseAnswer(text) : (
+        <div className={`answer-markdown ${isStreaming ? "streaming-cursor" : ""}`}>
+          {text ? <ReactMarkdown>{stripQuoteTags(text)}</ReactMarkdown> : (
             <span style={{
               color: "#5F6854", fontFamily: "var(--font-mono)",
               fontSize: "0.75rem", textTransform: "uppercase",
