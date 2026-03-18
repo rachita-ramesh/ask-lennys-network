@@ -306,15 +306,16 @@ export default function Home() {
                 <>
                   {/* Left sidebar — expert cards */}
                   <aside style={{
-                    width: "320px",
+                    width: "280px",
                     flexShrink: 0,
-                    borderRight: "1px solid rgba(42, 49, 34, 0.1)",
                     background: "var(--background, #EAE8DF)",
                     display: "flex",
                     flexDirection: "column",
                     padding: "1.5rem",
+                    paddingRight: "0",
                     overflowY: "auto",
                     gap: "1rem",
+                    marginRight: "2rem",
                   }}>
                     <h2 style={{
                       fontSize: "0.65rem",
@@ -396,7 +397,6 @@ export default function Home() {
                     display: "flex",
                     flexDirection: "column",
                     minHeight: 0,
-                    background: "#fff",
                     borderRadius: "0",
                   }}>
                     <AnswerPanel
