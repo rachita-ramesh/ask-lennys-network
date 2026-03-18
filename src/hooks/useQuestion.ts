@@ -9,11 +9,15 @@ export interface Message {
   content: string;
 }
 
-async function fetchAnswer(personSlug: string, question: string): Promise<string> {
+async function fetchAnswer(personSlug: string, question: string, history?: Message[]): Promise<string> {
+  const body: Record<string, unknown> = { question, personSlug };
+  if (history && history.length > 0) {
+    body.history = history;
+  }
   const res = await fetch("/api/answer", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question, personSlug }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error("Failed to fetch answer");
 
@@ -185,7 +189,7 @@ export function useQuestion() {
       currentHistory.push({ role: "user", content: followUp });
 
       try {
-        const followUpText = await fetchAnswer(selectedPerson.slug, followUp);
+        const followUpText = await fetchAnswer(selectedPerson.slug, followUp, currentHistory);
 
         setMessages((prev) => {
           const updated = [...prev];
