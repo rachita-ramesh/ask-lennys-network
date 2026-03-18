@@ -7,6 +7,19 @@ import AnswerPanel from "@/components/AnswerPanel";
 import DissentBubble from "@/components/DissentBubble";
 import { useQuestion } from "@/hooks/useQuestion";
 
+function avatarColor(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const colors = ["#D45D48", "#5F6854", "#8B7355", "#6B8E7B", "#9B6B5E", "#7B8471", "#A67B5B"];
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function initials(name: string): string {
+  return name.split(" ").map((w) => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
+}
+
 const exampleCards = [
   { tag: "Growth", title: "Structuring a Growth Team", question: "When transitioning from early stage to series B, how should you divide responsibilities between core product and growth?" },
   { tag: "Strategy", title: "Defining Product Vision", question: "Practical frameworks for moving past a feature backlog and establishing a compelling 3-year product vision." },
@@ -235,21 +248,17 @@ export default function Home() {
           {phase !== "idle" && (
             <div style={{
               display: "flex",
-              flexDirection: "column",
               height: "calc(100vh - 6.5rem)",
               minHeight: 0,
             }}>
-              {/* Spacer */}
-              <div style={{ flexShrink: 0 }} />
-
-              {/* Loading state */}
+              {/* Loading state — centered */}
               {phase === "selecting" && (
                 <div style={{
-                  textAlign: "center",
-                  marginTop: "2rem",
+                  flex: 1,
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: "1rem",
                 }}>
                   <svg className="animate-spin" style={{ width: "20px", height: "20px", color: "#5F6854" }} viewBox="0 0 24 24">
@@ -292,52 +301,115 @@ export default function Home() {
                 </div>
               )}
 
-              {/* Selected person — tabs fixed, answer scrolls */}
+              {/* Selected person — sidebar + chat */}
               {selectedPerson && (
                 <>
-                  {/* Person tabs — fixed */}
-                  <div style={{
-                    display: "flex",
-                    gap: "0.5rem",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    marginBottom: "0.5rem",
+                  {/* Left sidebar — expert cards */}
+                  <aside style={{
+                    width: "320px",
                     flexShrink: 0,
+                    borderRight: "1px solid rgba(42, 49, 34, 0.1)",
+                    background: "var(--background, #EAE8DF)",
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "1.5rem",
+                    overflowY: "auto",
+                    gap: "1rem",
                   }}>
-                    {suggestions.map((s) => (
-                      <button
-                        key={s.person.slug}
-                        onClick={() => selectPerson(s.person)}
-                        style={{
-                          fontFamily: "var(--font-mono)",
-                          fontSize: "0.7rem",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.05em",
-                          padding: "0.5rem 1rem",
-                          borderRadius: "100px",
-                          border: `1px solid ${s.person.slug === selectedPerson.slug ? "#D45D48" : "rgba(42, 49, 34, 0.15)"}`,
-                          background: s.person.slug === selectedPerson.slug ? "#D45D48" : "transparent",
-                          color: s.person.slug === selectedPerson.slug ? "#fff" : "#5F6854",
-                          cursor: "pointer",
-                          transition: "all 0.3s ease",
-                        }}
-                      >
-                        {s.person.name}
-                      </button>
-                    ))}
-                  </div>
+                    <h2 style={{
+                      fontSize: "0.65rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.15em",
+                      textTransform: "uppercase",
+                      color: "#a8a29e",
+                      marginBottom: "0.25rem",
+                    }}>
+                      Experts
+                    </h2>
+                    {suggestions.map((s) => {
+                      const isActive = s.person.slug === selectedPerson.slug;
+                      const bg = avatarColor(s.person.name);
+                      return (
+                        <button
+                          key={s.person.slug}
+                          onClick={() => selectPerson(s.person)}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                            textAlign: "left",
+                            padding: "1.25rem",
+                            borderRadius: "16px",
+                            border: isActive ? "2px solid #D45D48" : "2px solid transparent",
+                            background: isActive ? "#fff" : "rgba(255, 255, 255, 0.4)",
+                            boxShadow: isActive ? "0 4px 12px rgba(0,0,0,0.05)" : "none",
+                            cursor: "pointer",
+                            transition: "all 0.2s ease",
+                            width: "100%",
+                          }}
+                        >
+                          <div style={{
+                            width: "48px",
+                            height: "48px",
+                            borderRadius: "50%",
+                            background: isActive ? bg : "#d6d3d1",
+                            color: "#fff",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: 700,
+                            fontSize: "0.875rem",
+                            marginBottom: "1rem",
+                            boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)",
+                          }}>
+                            {initials(s.person.name)}
+                          </div>
+                          <h3 style={{
+                            fontWeight: 700,
+                            fontSize: "0.95rem",
+                            lineHeight: 1.2,
+                            color: isActive ? "#1c1917" : "#57534e",
+                          }}>
+                            {s.person.name}
+                          </h3>
+                          {s.person.title && (
+                            <p style={{
+                              fontSize: "0.6rem",
+                              color: isActive ? "#78716c" : "#a8a29e",
+                              textTransform: "uppercase",
+                              letterSpacing: "0.15em",
+                              fontWeight: 600,
+                              marginTop: "0.25rem",
+                            }}>
+                              {s.person.title}
+                            </p>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </aside>
 
-                  {/* Chat interface */}
-                  <AnswerPanel
-                    person={selectedPerson}
-                    question={question}
-                    answer={answer}
-                    isStreaming={isStreaming}
-                    messages={messages}
-                    isFollowUpStreaming={isFollowUpStreaming}
-                    onFollowUp={askFollowUp}
-                    onAnswerUpdate={setAnswerRef}
-                  />
+                  {/* Chat area */}
+                  <div style={{
+                    flex: 1,
+                    minWidth: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    minHeight: 0,
+                    background: "#fff",
+                    borderRadius: "0",
+                  }}>
+                    <AnswerPanel
+                      person={selectedPerson}
+                      question={question}
+                      answer={answer}
+                      isStreaming={isStreaming}
+                      messages={messages}
+                      isFollowUpStreaming={isFollowUpStreaming}
+                      onFollowUp={askFollowUp}
+                      onAnswerUpdate={setAnswerRef}
+                    />
+                  </div>
                 </>
               )}
             </div>
