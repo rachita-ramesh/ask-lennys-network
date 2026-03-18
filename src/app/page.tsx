@@ -1,8 +1,10 @@
 "use client";
+import { useState, useEffect, useRef } from "react";
 import Header from "@/components/Header";
 import QuestionInput from "@/components/QuestionInput";
 import PeopleSuggestions from "@/components/PeopleSuggestions";
 import AnswerPanel from "@/components/AnswerPanel";
+import DissentBubble from "@/components/DissentBubble";
 import { useQuestion } from "@/hooks/useQuestion";
 
 const exampleCards = [
@@ -108,6 +110,7 @@ export default function Home() {
     selectedPerson,
     answer,
     isStreaming,
+    dissent,
     error,
     messages,
     isFollowUpStreaming,
@@ -117,6 +120,20 @@ export default function Home() {
     setAnswerRef,
     reset,
   } = useQuestion();
+
+  const [dissentDismissed, setDissentDismissed] = useState(false);
+  const lastQuestionRef = useRef("");
+
+  // Reset dismissed state when a new question is asked
+  useEffect(() => {
+    if (question && question !== lastQuestionRef.current) {
+      lastQuestionRef.current = question;
+      setDissentDismissed(false);
+    }
+  }, [question]);
+
+  const showDissent = dissent && selectedPerson && !dissentDismissed &&
+    dissent.dissenter.slug !== selectedPerson.slug;
 
   return (
     <div style={{
@@ -328,6 +345,17 @@ export default function Home() {
         </main>
       </div>
 
+      {/* Dissent bubble — shown once per question */}
+      {showDissent && (
+        <DissentBubble
+          dissent={dissent}
+          onSelect={() => {
+            setDissentDismissed(true);
+            selectPerson(dissent.dissenter);
+          }}
+          onDismiss={() => setDissentDismissed(true)}
+        />
+      )}
     </div>
   );
 }

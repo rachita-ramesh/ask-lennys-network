@@ -5,6 +5,7 @@ import { DissentResult } from "@/lib/types";
 interface Props {
   dissent: DissentResult;
   onSelect: () => void;
+  onDismiss?: () => void;
 }
 
 function avatarColor(name: string): string {
@@ -20,7 +21,7 @@ function initials(name: string): string {
   return name.split(" ").map((w) => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
 }
 
-export default function DissentBubble({ dissent, onSelect }: Props) {
+export default function DissentBubble({ dissent, onSelect, onDismiss }: Props) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -36,6 +37,7 @@ export default function DissentBubble({ dissent, onSelect }: Props) {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
+          position: "relative",
           background: hovered ? "#fff" : "rgba(255,255,255,0.9)",
           backdropFilter: "blur(10px)",
           borderRadius: "12px",
@@ -51,6 +53,29 @@ export default function DissentBubble({ dissent, onSelect }: Props) {
           transform: hovered ? "translateY(-2px)" : "translateY(0)",
         }}
       >
+        {onDismiss && (
+          <span
+            role="button"
+            onClick={(e) => { e.stopPropagation(); onDismiss(); }}
+            style={{
+              position: "absolute",
+              top: "0.5rem",
+              right: "0.5rem",
+              width: "24px",
+              height: "24px",
+              borderRadius: "50%",
+              background: "rgba(42, 49, 34, 0.08)",
+              color: "#5F6854",
+              fontSize: "0.75rem",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            &times;
+          </span>
+        )}
         <div style={{ display: "flex", alignItems: "center", gap: "0.625rem", marginBottom: "0.75rem" }}>
           <div style={{
             width: "32px",

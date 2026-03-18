@@ -63,6 +63,7 @@ export function useQuestion() {
   // Follow-up messages keyed by person slug
   const messagesPerPerson = useRef<Map<string, Message[]>>(new Map());
   const latestAnswerRef = useRef("");
+  const dissentFetched = useRef(false);
 
   const askQuestion = useCallback(async (q: string) => {
     setQuestion(q);
@@ -75,6 +76,7 @@ export function useQuestion() {
     setAnswer("");
     prefetchedAnswers.current.clear();
     messagesPerPerson.current.clear();
+    dissentFetched.current = false;
 
     try {
       const res = await fetch("/api/suggest-people", {
@@ -115,7 +117,6 @@ export function useQuestion() {
       });
 
       setSelectedPerson(person);
-      setDissent(null);
       // Restore target person's messages
       const savedMessages = messagesPerPerson.current.get(person.slug) || [];
       setMessages(savedMessages);
@@ -148,12 +149,15 @@ export function useQuestion() {
         return;
       }
 
-      // Fire dissent check async
+      // Fire dissent check async — only once per question
+      if (dissentFetched.current) return;
+
       const otherSlugs = suggestions
         .map((s) => s.person.slug)
         .filter((s) => s !== person.slug);
 
       if (otherSlugs.length > 0) {
+        dissentFetched.current = true;
         fetch("/api/dissent", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
