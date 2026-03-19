@@ -1,4 +1,5 @@
 "use client";
+import ReactMarkdown from "react-markdown";
 import { PRDSection, PRDComment } from "@/lib/prd-types";
 
 interface Props {
@@ -31,98 +32,119 @@ export default function PRDViewer({
       style={{
         flex: 1,
         overflowY: "auto",
-        padding: "2rem 2.5rem",
+        padding: "2.5rem 3rem",
         minWidth: 0,
       }}
     >
-      <h1
+      {/* Document container */}
+      <div
         style={{
-          fontFamily: "var(--font-serif)",
-          fontSize: "2rem",
-          fontWeight: 400,
-          color: "#2A3122",
-          marginBottom: "2rem",
-          letterSpacing: "-0.02em",
+          maxWidth: "780px",
+          margin: "0 auto",
+          background: "#fff",
+          borderRadius: "12px",
+          border: "1px solid rgba(42, 49, 34, 0.08)",
+          boxShadow: "0 2px 20px rgba(0,0,0,0.04)",
+          padding: "3rem 3.5rem",
         }}
       >
-        {title}
-      </h1>
+        <h1
+          style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: "2rem",
+            fontWeight: 400,
+            color: "#1c1917",
+            marginBottom: "0.5rem",
+            letterSpacing: "-0.02em",
+            lineHeight: 1.2,
+          }}
+        >
+          {title}
+        </h1>
 
-      {sections.map((section) => {
-        const isActive = activeSectionId === section.id;
-        const count = commentCountBySection.get(section.id) || 0;
+        <div
+          style={{
+            width: "3rem",
+            height: "2px",
+            background: "#D45D48",
+            margin: "1.5rem 0 2rem",
+          }}
+        />
 
-        return (
-          <div
-            key={section.id}
-            id={section.id}
-            onClick={() => onSectionClick(section.id)}
-            style={{
-              position: "relative",
-              padding: "1rem 1.25rem",
-              marginBottom: "0.25rem",
-              borderRadius: "8px",
-              borderLeft: isActive
-                ? "3px solid #D45D48"
-                : "3px solid transparent",
-              background: isActive
-                ? "rgba(212, 93, 72, 0.04)"
-                : count > 0
-                ? "rgba(255, 255, 255, 0.3)"
-                : "transparent",
-              cursor: count > 0 ? "pointer" : "default",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {section.heading && (
-              <h2
-                style={{
-                  fontFamily: "var(--font-serif)",
-                  fontSize: "1.25rem",
-                  fontWeight: 400,
-                  color: "#2A3122",
-                  marginBottom: "0.5rem",
-                }}
-              >
-                {section.heading}
-              </h2>
-            )}
-            <p
+        {sections.map((section) => {
+          const isActive = activeSectionId === section.id;
+          const count = commentCountBySection.get(section.id) || 0;
+
+          return (
+            <div
+              key={section.id}
+              id={section.id}
+              onClick={() => onSectionClick(section.id)}
               style={{
-                fontSize: "0.95rem",
-                lineHeight: 1.8,
-                color: "#57534e",
-                whiteSpace: "pre-wrap",
+                position: "relative",
+                padding: "0.75rem 1rem",
+                marginBottom: "0.125rem",
+                borderRadius: "6px",
+                borderLeft: isActive
+                  ? "3px solid #D45D48"
+                  : "3px solid transparent",
+                background: isActive
+                  ? "rgba(212, 93, 72, 0.03)"
+                  : count > 0
+                  ? "rgba(245, 243, 239, 0.6)"
+                  : "transparent",
+                cursor: count > 0 ? "pointer" : "default",
+                transition: "all 0.2s ease",
+                marginLeft: "-1rem",
+                marginRight: "-1rem",
               }}
             >
-              {section.content}
-            </p>
+              {section.heading && (
+                <h2
+                  style={{
+                    fontFamily: "var(--font-serif)",
+                    fontSize: "1.35rem",
+                    fontWeight: 400,
+                    color: "#1c1917",
+                    marginBottom: "0.625rem",
+                    marginTop: "1.25rem",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {section.heading}
+                </h2>
+              )}
+              <div className="prd-document-content">
+                <ReactMarkdown>{section.content}</ReactMarkdown>
+              </div>
 
-            {/* Comment count badge */}
-            {count > 0 && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: "0.75rem",
-                  right: "0.75rem",
-                  background: "#D45D48",
-                  color: "#fff",
-                  fontSize: "0.6rem",
-                  fontWeight: 700,
-                  width: "20px",
-                  height: "20px",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {count}
-              </span>
-            )}
-          </div>
-        );
-      })}
+              {/* Comment count badge */}
+              {count > 0 && (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "0.5rem",
+                    right: "-0.25rem",
+                    background: "#D45D48",
+                    color: "#fff",
+                    fontSize: "0.55rem",
+                    fontWeight: 700,
+                    width: "18px",
+                    height: "18px",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 1px 4px rgba(212, 93, 72, 0.3)",
+                  }}
+                >
+                  {count}
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

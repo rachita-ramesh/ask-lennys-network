@@ -102,6 +102,102 @@ input::placeholder {
   margin-bottom: 0.25em;
 }
 
+/* PRD document content */
+.prd-document-content {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: #44403c;
+}
+.prd-document-content p {
+  margin-bottom: 0.875em;
+}
+.prd-document-content p:last-child {
+  margin-bottom: 0;
+}
+.prd-document-content strong {
+  font-weight: 600;
+  color: #1c1917;
+}
+.prd-document-content em {
+  font-style: italic;
+}
+.prd-document-content ul, .prd-document-content ol {
+  margin: 0.75em 0;
+  padding-left: 1.75em;
+}
+.prd-document-content li {
+  margin-bottom: 0.375em;
+}
+.prd-document-content code {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  background: #f5f3ef;
+  border: 1px solid #e7e5e4;
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+  color: #57534e;
+}
+.prd-document-content pre {
+  background: #1c1917;
+  color: #e7e5e4;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+.prd-document-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+.prd-document-content blockquote {
+  border-left: 3px solid #D45D48;
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  color: #78716c;
+  font-style: italic;
+}
+.prd-document-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.85rem;
+}
+.prd-document-content th, .prd-document-content td {
+  border: 1px solid #e7e5e4;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.prd-document-content th {
+  background: #f5f3ef;
+  font-weight: 600;
+  color: #1c1917;
+}
+.prd-document-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1c1917;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+}
+.prd-document-content h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #44403c;
+  margin-top: 1em;
+  margin-bottom: 0.375em;
+}
+.prd-document-content hr {
+  border: none;
+  height: 1px;
+  background: #e7e5e4;
+  margin: 1.5rem 0;
+}
+
 /* Streaming cursor */
 .streaming-cursor::after {
   content: "|";
