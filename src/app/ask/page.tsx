@@ -179,7 +179,7 @@ export default function AskPage() {
                   marginBottom: "1.5rem",
                   color: "#2A3122",
                 }}>
-                  Ask <i style={{ fontStyle: "italic", paddingRight: "0.1em" }}>Lenny&apos;s</i> Network
+                  Ask the <i style={{ fontStyle: "italic", paddingRight: "0.1em" }}>Network</i>
                 </h1>
                 <p style={{
                   fontSize: "1.125rem",

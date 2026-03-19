@@ -63,7 +63,7 @@ export default function PRDReviewLayout() {
               marginBottom: "1.5rem",
             }}
           >
-            Get Expert Feedback
+            <i style={{ fontStyle: "italic", paddingRight: "0.1em" }}>Sharpen</i> Your PRD
           </h1>
           <p
             style={{
