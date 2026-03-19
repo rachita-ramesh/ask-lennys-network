@@ -8,7 +8,7 @@ export default function Header() {
 
   const navItems = [
     { label: "Review", href: "/" },
-    { label: "Ask", href: "/ask" },
+    // { label: "Ask", href: "/ask" },
     { label: "People", href: "/browse" },
   ];
 
@@ -44,7 +44,7 @@ export default function Header() {
         >
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
-        Lenny&apos;s Network
+        Lenny&apos;s Board
       </Link>
       <nav style={{ display: "flex", gap: "2rem" }}>
         {navItems.map((item) => {
