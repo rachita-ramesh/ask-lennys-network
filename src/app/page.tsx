@@ -5,20 +5,9 @@ import QuestionInput from "@/components/QuestionInput";
 import PeopleSuggestions from "@/components/PeopleSuggestions";
 import AnswerPanel from "@/components/AnswerPanel";
 import DissentBubble from "@/components/DissentBubble";
+import PRDReviewLayout from "@/components/PRDReviewLayout";
 import { useQuestion } from "@/hooks/useQuestion";
-
-function avatarColor(name: string): string {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const colors = ["#D45D48", "#5F6854", "#8B7355", "#6B8E7B", "#9B6B5E", "#7B8471", "#A67B5B"];
-  return colors[Math.abs(hash) % colors.length];
-}
-
-function initials(name: string): string {
-  return name.split(" ").map((w) => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
-}
+import { avatarColor, initials } from "@/lib/ui-utils";
 
 const exampleCards = [
   { tag: "Growth", title: "Structuring a Growth Team", question: "When transitioning from early stage to series B, how should you divide responsibilities between core product and growth?" },
@@ -134,6 +123,7 @@ export default function Home() {
     reset,
   } = useQuestion();
 
+  const [activeTab, setActiveTab] = useState<"review" | "ask">("review");
   const [dissentDismissed, setDissentDismissed] = useState(false);
   const lastQuestionRef = useRef("");
 
@@ -148,6 +138,55 @@ export default function Home() {
   const showDissent = dissent && selectedPerson && !dissentDismissed &&
     dissent.dissenter.slug !== selectedPerson.slug;
 
+  // PRD Review tab — full height layout
+  if (activeTab === "review") {
+    return (
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        overflow: "hidden",
+      }}>
+        <div style={{ padding: "0.5rem 2rem 0", flexShrink: 0 }}>
+          <Header compact />
+        </div>
+
+        {/* Tab bar */}
+        <div style={{
+          display: "flex",
+          gap: "2rem",
+          padding: "0 2rem",
+          borderBottom: "1px solid rgba(42, 49, 34, 0.08)",
+          flexShrink: 0,
+        }}>
+          {(["review", "ask"] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.75rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                color: activeTab === tab ? "#D45D48" : "#5F6854",
+                background: "none",
+                border: "none",
+                borderBottom: activeTab === tab ? "2px solid #D45D48" : "2px solid transparent",
+                padding: "0.75rem 0",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {tab === "review" ? "PRD Review" : "Ask"}
+            </button>
+          ))}
+        </div>
+
+        <PRDReviewLayout />
+      </div>
+    );
+  }
+
   return (
     <div style={{
       display: "flex",
@@ -161,6 +200,34 @@ export default function Home() {
     }}>
       <div style={{ width: "100%", maxWidth: "1120px", margin: "0 auto", position: "relative", zIndex: 1 }}>
         <Header compact={phase !== "idle" && !!selectedPerson} />
+
+        {/* Tab bar */}
+        <div style={{
+          display: "flex",
+          gap: "2rem",
+          marginBottom: "2rem",
+        }}>
+          {(["review", "ask"] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.75rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                color: activeTab === tab ? "#D45D48" : "#5F6854",
+                background: "none",
+                border: "none",
+                borderBottom: activeTab === tab ? "2px solid #D45D48" : "2px solid transparent",
+                padding: "0.5rem 0",
+                cursor: "pointer",
+              }}
+            >
+              {tab === "review" ? "PRD Review" : "Ask"}
+            </button>
+          ))}
+        </div>
 
         <main>
           {/* Hero — shown when idle */}
