@@ -132,7 +132,7 @@ export default function AnswerPanel({
       {/* Scrollable chat area */}
       <div style={{
         flex: 1, minHeight: 0, overflow: "auto",
-        padding: "1rem 0",
+        padding: "1rem 1.5rem 1rem 0",
       }}>
         {/* Initial question */}
         <UserBubble text={question} />
