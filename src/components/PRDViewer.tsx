@@ -32,7 +32,7 @@ export default function PRDViewer({
       style={{
         flex: 1,
         overflowY: "auto",
-        padding: "2.5rem 3rem",
+        padding: "1.5rem 1.5rem",
         minWidth: 0,
       }}
     >
@@ -45,7 +45,7 @@ export default function PRDViewer({
           borderRadius: "12px",
           border: "1px solid rgba(42, 49, 34, 0.08)",
           boxShadow: "0 2px 20px rgba(0,0,0,0.04)",
-          padding: "3rem 3.5rem",
+          padding: "2.5rem 2.5rem",
         }}
       >
         <h1

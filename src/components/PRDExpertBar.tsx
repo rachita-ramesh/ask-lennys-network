@@ -27,7 +27,7 @@ export default function PRDExpertBar({
       <span
         style={{
           fontFamily: "var(--font-mono)",
-          fontSize: "0.6rem",
+          fontSize: "0.75rem",
           textTransform: "uppercase",
           letterSpacing: "0.15em",
           color: "#a8a29e",
@@ -59,29 +59,42 @@ export default function PRDExpertBar({
           >
             <div
               style={{
-                width: "24px",
-                height: "24px",
+                width: "30px",
+                height: "30px",
                 borderRadius: "50%",
                 background: bg,
                 color: "#fff",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "0.5rem",
+                fontSize: "0.6rem",
                 fontWeight: 700,
               }}
             >
               {initials(er.expert.name)}
             </div>
-            <span
-              style={{
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                color: "#2A3122",
-              }}
-            >
-              {er.expert.name.split(" ")[0]}
-            </span>
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
+              <span
+                style={{
+                  fontSize: "0.875rem",
+                  fontWeight: 600,
+                  color: "#2A3122",
+                }}
+              >
+                {er.expert.name}
+              </span>
+              {er.expert.title && (
+                <span
+                  style={{
+                    fontSize: "0.7rem",
+                    color: "#78716c",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {er.expert.title}
+                </span>
+              )}
+            </div>
             {/* Status indicator */}
             {er.status === "streaming" || er.status === "pending" ? (
               <svg
