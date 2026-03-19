@@ -148,19 +148,19 @@ export default function PersonQuestion({ person }: Props) {
           flexShrink: 0,
           background: "#F6F4F0",
           borderRadius: "36px",
-          padding: "2.5rem",
+          padding: "2rem 2.5rem",
           display: "flex",
           flexDirection: "column",
           border: "1px solid rgba(255, 255, 255, 0.6)",
           boxShadow: "0 8px 40px rgba(0,0,0,0.03), inset 0 2px 4px rgba(255,255,255,0.5)",
-          overflowY: "auto",
+          overflow: "hidden",
         }}>
           {/* Avatar with glow */}
           <div style={{
             position: "relative",
-            width: "112px",
-            height: "112px",
-            margin: "0.5rem auto 0",
+            width: "80px",
+            height: "80px",
+            margin: "0.25rem auto 0",
           }}>
             <div style={{
               position: "absolute",
@@ -193,7 +193,7 @@ export default function PersonQuestion({ person }: Props) {
               alignItems: "center",
               justifyContent: "center",
               color: "#fff",
-              fontSize: "1.875rem",
+              fontSize: "1.5rem",
               fontFamily: "var(--font-serif)",
               boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)",
             }}>
@@ -202,7 +202,7 @@ export default function PersonQuestion({ person }: Props) {
           </div>
 
           {/* Name + title */}
-          <div style={{ marginTop: "2rem", textAlign: "center" }}>
+          <div style={{ marginTop: "1rem", textAlign: "center" }}>
             <h1 style={{
               fontSize: "1.75rem",
               fontFamily: "var(--font-serif)",
@@ -231,7 +231,7 @@ export default function PersonQuestion({ person }: Props) {
             width: "2.5rem",
             height: "1px",
             background: "#d6d3d1",
-            margin: "2rem auto",
+            margin: "1rem auto",
           }} />
 
           {/* Description */}

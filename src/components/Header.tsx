@@ -19,7 +19,6 @@ export default function Header() {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      borderBottom: "1px solid rgba(42, 49, 34, 0.08)",
       flexShrink: 0,
     }}>
       <Link href="/" style={{

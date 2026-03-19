@@ -34,13 +34,11 @@ export default function PRDReviewLayout() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
           flex: 1,
-          gap: "2rem",
-          padding: "2rem",
+          padding: "0 2rem",
         }}
       >
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+        <div style={{ textAlign: "center", marginBottom: "4rem", marginTop: "0" }}>
           <span
             style={{
               fontFamily: "var(--font-mono)",
@@ -57,21 +55,22 @@ export default function PRDReviewLayout() {
           <h1
             style={{
               fontFamily: "var(--font-serif)",
-              fontSize: "clamp(2.5rem, 5vw, 4rem)",
+              fontSize: "clamp(3.5rem, 6vw, 5.5rem)",
               fontWeight: 400,
-              lineHeight: 1.05,
+              lineHeight: 1,
               letterSpacing: "-0.03em",
               color: "#2A3122",
-              marginBottom: "1rem",
+              marginBottom: "1.5rem",
             }}
           >
-            Get expert feedback on your PRD
+            Get Expert Feedback
           </h1>
           <p
             style={{
-              fontSize: "1.05rem",
+              fontSize: "1.125rem",
               color: "#5F6854",
-              maxWidth: "480px",
+              fontFamily: "var(--font-sans)",
+              maxWidth: "500px",
               margin: "0 auto",
               lineHeight: 1.6,
             }}
