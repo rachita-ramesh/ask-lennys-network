@@ -147,7 +147,7 @@ export default function AskPage() {
       position: "relative",
     }}>
       <div style={{ width: "100%", maxWidth: "1120px", margin: "0 auto", position: "relative", zIndex: 1 }}>
-        <Header compact={phase !== "idle" && !!selectedPerson} />
+        <Header />
 
         <main>
           {phase === "idle" && (

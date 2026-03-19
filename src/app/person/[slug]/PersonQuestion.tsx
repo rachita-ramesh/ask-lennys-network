@@ -134,7 +134,7 @@ export default function PersonQuestion({ person }: Props) {
     }}>
       {/* Header */}
       <div style={{ padding: "0.5rem 2rem 0", flexShrink: 0 }}>
-        <Header compact />
+        <Header />
       </div>
 
       {/* Two-column layout */}

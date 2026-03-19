@@ -11,7 +11,7 @@ export default function Home() {
       overflow: "hidden",
     }}>
       <div style={{ padding: "0.5rem 2rem 0", flexShrink: 0 }}>
-        <Header compact />
+        <Header />
       </div>
       <PRDReviewLayout />
     </div>

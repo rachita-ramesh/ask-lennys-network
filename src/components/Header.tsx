@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Header({ compact = false }: { compact?: boolean }) {
+export default function Header() {
   const pathname = usePathname();
   const isBrowse = pathname === "/browse" || pathname.startsWith("/person/");
 
@@ -18,8 +18,7 @@ export default function Header({ compact = false }: { compact?: boolean }) {
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingBottom: compact ? "1rem" : isBrowse ? "3rem" : "2rem",
-      paddingTop: "0.5rem",
+      padding: "1rem 0",
     }}>
       <Link href="/" style={{
         fontFamily: "var(--font-serif)",
