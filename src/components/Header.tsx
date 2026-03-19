@@ -7,7 +7,8 @@ export default function Header({ compact = false }: { compact?: boolean }) {
   const isBrowse = pathname === "/browse" || pathname.startsWith("/person/");
 
   const navItems = [
-    { label: "Ask", href: "/" },
+    { label: "Review", href: "/" },
+    { label: "Ask", href: "/ask" },
     { label: "People", href: "/browse" },
   ];
 
@@ -48,7 +49,8 @@ export default function Header({ compact = false }: { compact?: boolean }) {
       <nav style={{ display: "flex", gap: "2rem" }}>
         {navItems.map((item) => {
           const isActive =
-            (item.href === "/" && !isBrowse) ||
+            (item.href === "/" && pathname === "/") ||
+            (item.href === "/ask" && pathname === "/ask") ||
             (item.href === "/browse" && isBrowse);
 
           return (
