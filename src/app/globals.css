@@ -177,6 +177,15 @@ input::placeholder {
   font-weight: 600;
   color: #1c1917;
 }
+.prd-document-content h2 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #1c1917;
+  margin-top: 1.5em;
+  margin-bottom: 0.625em;
+  letter-spacing: -0.01em;
+}
 .prd-document-content h3 {
   font-size: 1.1rem;
   font-weight: 600;
@@ -190,6 +199,15 @@ input::placeholder {
   color: #44403c;
   margin-top: 1em;
   margin-bottom: 0.375em;
+}
+.prd-document-content h5 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #57534e;
+  margin-top: 0.875em;
+  margin-bottom: 0.375em;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 .prd-document-content hr {
   border: none;

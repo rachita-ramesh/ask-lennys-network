@@ -237,8 +237,8 @@ export default function PersonQuestion({ person }: Props) {
           {/* Description */}
           {person.description && (
             <p style={{
-              fontSize: "0.9375rem",
-              lineHeight: 1.8,
+              fontSize: "0.875rem",
+              lineHeight: 1.6,
               color: "#57534e",
               textAlign: "center",
               padding: "0 0.5rem",
@@ -249,7 +249,7 @@ export default function PersonQuestion({ person }: Props) {
           )}
 
           {/* Expertise */}
-          <div style={{ marginTop: "3rem" }}>
+          <div style={{ marginTop: "1.5rem" }}>
             <div style={{
               display: "flex",
               alignItems: "center",
@@ -289,7 +289,7 @@ export default function PersonQuestion({ person }: Props) {
           </div>
 
           {/* Sources */}
-          <div style={{ marginTop: "3rem", marginBottom: "1.5rem" }}>
+          <div style={{ marginTop: "1.5rem", marginBottom: "0.5rem" }}>
             <div style={{
               display: "flex",
               alignItems: "center",
