@@ -132,10 +132,7 @@ export default function PersonQuestion({ person }: Props) {
       flexDirection: "column",
       overflow: "hidden",
     }}>
-      {/* Header */}
-      <div style={{ padding: "0.5rem 2rem 0", flexShrink: 0 }}>
-        <Header />
-      </div>
+      <Header />
 
       {/* Two-column layout */}
       <div style={{

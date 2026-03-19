@@ -40,12 +40,10 @@ export default async function PersonPage({
     <div style={{
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
-      padding: "2rem",
       minHeight: "100vh",
     }}>
-      <div style={{ width: "100%", maxWidth: "740px", margin: "0 auto" }}>
-        <Header />
+      <Header />
+      <div style={{ width: "100%", maxWidth: "740px", margin: "0 auto", padding: "0 2rem" }}>
 
         <main>
           <Link

@@ -15,10 +15,12 @@ export default function Header() {
   return (
     <header style={{
       width: "100%",
+      padding: "0.75rem 2.5rem",
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "1rem 0",
+      borderBottom: "1px solid rgba(42, 49, 34, 0.08)",
+      flexShrink: 0,
     }}>
       <Link href="/" style={{
         fontFamily: "var(--font-serif)",

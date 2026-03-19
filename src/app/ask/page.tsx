@@ -139,16 +139,22 @@ export default function AskPage() {
     <div style={{
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
-      padding: phase !== "idle" && selectedPerson ? "1rem 2rem" : "2rem",
       height: phase !== "idle" && selectedPerson ? "100vh" : undefined,
       minHeight: phase !== "idle" && selectedPerson ? undefined : "100vh",
       overflow: phase !== "idle" && selectedPerson ? "hidden" : undefined,
       position: "relative",
     }}>
-      <div style={{ width: "100%", maxWidth: "1120px", margin: "0 auto", position: "relative", zIndex: 1 }}>
-        <Header />
-
+      <Header />
+      <div style={{
+        width: "100%",
+        maxWidth: "1120px",
+        margin: "0 auto",
+        padding: "0 2rem",
+        position: "relative",
+        zIndex: 1,
+        flex: 1,
+        minHeight: 0,
+      }}>
         <main>
           {phase === "idle" && (
             <>

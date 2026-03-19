@@ -10,9 +10,7 @@ export default function Home() {
       height: "100vh",
       overflow: "hidden",
     }}>
-      <div style={{ padding: "0.5rem 2rem 0", flexShrink: 0 }}>
-        <Header />
-      </div>
+      <Header />
       <PRDReviewLayout />
     </div>
   );

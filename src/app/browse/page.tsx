@@ -19,13 +19,10 @@ export default async function BrowsePage() {
     <div style={{
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
-      padding: "2rem",
       minHeight: "100vh",
     }}>
-      <div style={{ width: "100%", maxWidth: "1120px", margin: "0 auto", position: "relative", zIndex: 1 }}>
-        <Header />
-
+      <Header />
+      <div style={{ width: "100%", maxWidth: "1120px", margin: "0 auto", padding: "0 2rem", position: "relative", zIndex: 1 }}>
         <main>
           {/* Page header — centered */}
           <div className="animate-fade-up delay-1" style={{ textAlign: "center", marginBottom: "3rem" }}>
