@@ -225,9 +225,9 @@ function PRDLoadingView({ phase }: { phase: string }) {
   }, [currentStage]);
 
   const getProgressHeight = () => {
-    if (currentStage === 1) return "0%";
-    if (currentStage === 2) return "50%";
-    return "100%";
+    if (currentStage === 1) return "0rem";
+    if (currentStage === 2) return "2rem";
+    return "4rem";
   };
 
   const steps = [
@@ -380,10 +380,10 @@ function PRDLoadingView({ phase }: { phase: string }) {
 
       {/* Progress steps */}
       <div style={{ position: "relative", width: "100%", maxWidth: "384px", display: "flex", flexDirection: "column", gap: "2rem", marginLeft: "2rem" }}>
-        {/* Background line */}
-        <div style={{ position: "absolute", left: "11px", top: "14px", bottom: "14px", width: "2px", background: "#E8E3DA", zIndex: -1 }} />
+        {/* Background line — spans from step 1 to step 3 center (2 gaps × 2rem = 4rem) */}
+        <div style={{ position: "absolute", left: "11px", top: "12px", height: "4rem", width: "2px", background: "#E8E3DA", zIndex: -1 }} />
         {/* Progress line */}
-        <div style={{ position: "absolute", left: "11px", top: "14px", width: "2px", background: "#D45D48", zIndex: -1, transition: "all 1s ease-in-out", height: getProgressHeight() }} />
+        <div style={{ position: "absolute", left: "11px", top: "12px", width: "2px", background: "#D45D48", zIndex: -1, transition: "all 1s ease-in-out", height: getProgressHeight() }} />
 
         {steps.map((step) => {
           const isDone = step.index < currentStage;

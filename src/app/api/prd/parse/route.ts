@@ -6,6 +6,66 @@ import { PRDSection, PRDImage, ParsedPRD } from "@/lib/prd-types";
  * bold, italic, and paragraph structure.
  * Images are extracted into a separate array and replaced with placeholders.
  */
+function convertTables(md: string): string {
+  return md.replace(/<table[^>]*>([\s\S]*?)<\/table>/gi, (_, tableContent) => {
+    const rows: string[][] = [];
+    const rowsRaw: string[][] = [];
+    const rowMatches = tableContent.match(/<tr[^>]*>([\s\S]*?)<\/tr>/gi) || [];
+    let hasHeader = false;
+
+    for (const row of rowMatches) {
+      const cells: string[] = [];
+      const cellsRaw: string[] = [];
+      const cellMatches = row.match(/<(td|th)[^>]*>([\s\S]*?)<\/\1>/gi) || [];
+      for (const cell of cellMatches) {
+        if (cell.startsWith("<th")) hasHeader = true;
+        const inner = cell.replace(/<(td|th)[^>]*>([\s\S]*?)<\/\1>/i, "$2");
+        cellsRaw.push(inner);
+        let text = inner
+          .replace(/<strong[^>]*>(.*?)<\/strong>/gi, "**$1**")
+          .replace(/<b[^>]*>(.*?)<\/b>/gi, "**$1**")
+          .replace(/<em[^>]*>(.*?)<\/em>/gi, "*$1*")
+          .replace(/<[^>]+>/g, "")
+          .replace(/&amp;/g, "&")
+          .replace(/&nbsp;/g, " ")
+          .trim();
+        cells.push(text);
+      }
+      if (cells.length > 0) {
+        rows.push(cells);
+        rowsRaw.push(cellsRaw);
+      }
+    }
+
+    if (rows.length === 0) return "";
+
+    // Detect header: <th> tags, or all cells in first row are bold
+    if (!hasHeader && rowsRaw.length > 0) {
+      const firstRowAllBold = rowsRaw[0].every((c) => /<strong|<b[^>]*>/i.test(c));
+      if (firstRowAllBold) hasHeader = true;
+    }
+
+    const colCount = Math.max(...rows.map((r) => r.length));
+    const padRow = (row: string[]) => {
+      const padded = [...row];
+      while (padded.length < colCount) padded.push("");
+      return padded;
+    };
+
+    let table = "";
+    const headerRow = padRow(rows[0]).map((c) =>
+      hasHeader ? c.replace(/\*\*/g, "") : c
+    );
+    table += "| " + headerRow.join(" | ") + " |\n";
+    table += "| " + headerRow.map(() => "---").join(" | ") + " |\n";
+    for (let i = 1; i < rows.length; i++) {
+      table += "| " + padRow(rows[i]).join(" | ") + " |\n";
+    }
+
+    return "\n\n" + table + "\n\n";
+  });
+}
+
 function htmlToMarkdown(html: string, images: PRDImage[]): string {
   let md = html;
 
@@ -16,6 +76,9 @@ function htmlToMarkdown(html: string, images: PRDImage[]): string {
   md = md.replace(/<h4[^>]*>(.*?)<\/h4>/gi, (_, content) => `#### ${stripTags(content)}\n\n`);
   md = md.replace(/<h5[^>]*>(.*?)<\/h5>/gi, (_, content) => `##### ${stripTags(content)}\n\n`);
   md = md.replace(/<h6[^>]*>(.*?)<\/h6>/gi, (_, content) => `###### ${stripTags(content)}\n\n`);
+
+  // Tables — must run BEFORE bold conversion so we can detect <strong> in header cells
+  md = convertTables(md);
 
   // Bold and italic (before stripping other tags)
   md = md.replace(/<strong[^>]*>(.*?)<\/strong>/gi, "**$1**");
@@ -59,6 +122,7 @@ function htmlToMarkdown(html: string, images: PRDImage[]): string {
 
   // Clean up any remaining LI markers
   md = md.replace(/\{\{LI\}\}|\{\{\/LI\}\}/g, "");
+
 
   // Paragraphs
   md = md.replace(/<p[^>]*>(.*?)<\/p>/gi, (_, content) => `${content.trim()}\n\n`);

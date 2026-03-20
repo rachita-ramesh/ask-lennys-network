@@ -1,5 +1,6 @@
 "use client";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { PRDSection, PRDComment, PRDImage } from "@/lib/prd-types";
 
 interface Props {
@@ -121,6 +122,7 @@ export default function PRDViewer({
               )}
               <div className="prd-document-content">
                 <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
                   components={{
                     img: ({ src, alt }) => {
                       const img = typeof src === "string" ? imageMap.get(src) : null;
