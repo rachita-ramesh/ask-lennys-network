@@ -182,6 +182,45 @@ export default function PRDCommentThread({
         </div>
       )}
 
+      {/* Typing indicator */}
+      {isReplying && (
+        <div style={{ marginLeft: "2.125rem", marginTop: "0.5rem" }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}>
+            <div style={{
+              width: "24px",
+              height: "24px",
+              borderRadius: "50%",
+              background: avatarColor(comment.expert.name),
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "0.45rem",
+              fontWeight: 700,
+              flexShrink: 0,
+            }}>
+              {initials(comment.expert.name)}
+            </div>
+            <div style={{
+              background: "rgba(42, 49, 34, 0.06)",
+              borderRadius: "16px 16px 16px 4px",
+              padding: "0.625rem 1rem",
+              display: "flex",
+              gap: "0.25rem",
+              alignItems: "center",
+            }}>
+              <div className="typing-dot" />
+              <div className="typing-dot" />
+              <div className="typing-dot" />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Reply button / input */}
       <div style={{ marginLeft: "2.125rem", marginTop: "0.5rem" }}>
         {showReplyInput ? (
@@ -222,7 +261,7 @@ export default function PRDCommentThread({
                   isReplying || !replyText.trim() ? "not-allowed" : "pointer",
               }}
             >
-              {isReplying ? "..." : "Reply"}
+              Reply
             </button>
           </form>
         ) : (
