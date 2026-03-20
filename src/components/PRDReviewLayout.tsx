@@ -224,12 +224,6 @@ function PRDLoadingView({ phase }: { phase: string }) {
     }
   }, [currentStage]);
 
-  const getProgressHeight = () => {
-    if (currentStage === 1) return "0rem";
-    if (currentStage === 2) return "2rem";
-    return "4rem";
-  };
-
   const steps = [
     { index: 1, label: "Uploading your product spec" },
     { index: 2, label: "Reading and understanding your PRD" },
@@ -378,40 +372,49 @@ function PRDLoadingView({ phase }: { phase: string }) {
         </div>
       </div>
 
-      {/* Progress steps */}
-      <div style={{ position: "relative", width: "100%", maxWidth: "384px", display: "flex", flexDirection: "column", gap: "2rem", marginLeft: "2rem" }}>
-        {/* Background line — spans from step 1 to step 3 center (2 gaps × 2rem = 4rem) */}
-        <div style={{ position: "absolute", left: "11px", top: "12px", height: "4rem", width: "2px", background: "#E8E3DA", zIndex: -1 }} />
-        {/* Progress line */}
-        <div style={{ position: "absolute", left: "11px", top: "12px", width: "2px", background: "#D45D48", zIndex: -1, transition: "all 1s ease-in-out", height: getProgressHeight() }} />
-
-        {steps.map((step) => {
+      {/* Progress steps — horizontal */}
+      <div style={{ position: "relative", width: "100%", maxWidth: "700px", display: "flex", alignItems: "center", gap: "0" }}>
+        {steps.map((step, i) => {
           const isDone = step.index < currentStage;
           const isCurrent = step.index === currentStage;
           return (
-            <div key={step.index} style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-              <div style={{
-                width: "24px", height: "24px", borderRadius: "50%",
-                border: `2px solid ${isDone ? "#92A897" : isCurrent ? "#D45D48" : "#E8E3DA"}`,
-                background: isDone ? "#92A897" : "var(--background, #EAE8DF)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0, zIndex: 10, transition: "all 0.5s ease",
-                boxShadow: "0 0 0 4px var(--background, #EAE8DF)",
-              }}>
-                {isDone && (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
-                )}
-                {isCurrent && (
-                  <div style={{ width: "12px", height: "12px", border: "2px solid #D45D48", borderTopColor: "transparent", borderRadius: "50%" }} className="animate-spin" />
-                )}
+            <div key={step.index} style={{ display: "flex", alignItems: "center", flex: i < steps.length - 1 ? 1 : undefined }}>
+              {/* Step circle + label */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.625rem", minWidth: "fit-content" }}>
+                <div style={{
+                  width: "28px", height: "28px", borderRadius: "50%",
+                  border: `2px solid ${isDone ? "#92A897" : isCurrent ? "#D45D48" : "#E8E3DA"}`,
+                  background: isDone ? "#92A897" : "var(--background, #EAE8DF)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  flexShrink: 0, zIndex: 10, transition: "all 0.5s ease",
+                  boxShadow: "0 0 0 4px var(--background, #EAE8DF)",
+                }}>
+                  {isDone && (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
+                  )}
+                  {isCurrent && (
+                    <div style={{ width: "12px", height: "12px", border: "2px solid #D45D48", borderTopColor: "transparent", borderRadius: "50%" }} className="animate-spin" />
+                  )}
+                </div>
+                <span style={{
+                  fontSize: "0.75rem", fontWeight: isCurrent ? 600 : 400,
+                  color: isDone ? "#92A897" : isCurrent ? "#2D2B2A" : "#9D9891",
+                  transition: "color 0.5s",
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                }}>
+                  {step.label}{isCurrent && "..."}
+                </span>
               </div>
-              <span style={{
-                fontSize: "0.9375rem", fontWeight: isCurrent ? 500 : 400,
-                color: isDone ? "#92A897" : isCurrent ? "#2D2B2A" : "#9D9891",
-                transition: "color 0.5s",
-              }}>
-                {step.label}{isCurrent && "..."}
-              </span>
+              {/* Connecting line */}
+              {i < steps.length - 1 && (
+                <div style={{
+                  flex: 1, height: "2px", marginBottom: "1.75rem",
+                  background: isDone ? "#D45D48" : "#E8E3DA",
+                  transition: "background 1s ease",
+                  minWidth: "2rem",
+                }} />
+              )}
             </div>
           );
         })}
