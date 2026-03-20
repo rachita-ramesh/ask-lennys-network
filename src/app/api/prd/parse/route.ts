@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PRDSection, ParsedPRD } from "@/lib/prd-types";
+import { PRDSection, PRDImage, ParsedPRD } from "@/lib/prd-types";
 
 /**
  * Convert HTML (from mammoth) to markdown, preserving headings, lists,
  * bold, italic, and paragraph structure.
+ * Images are extracted into a separate array and replaced with placeholders.
  */
-function htmlToMarkdown(html: string): string {
+function htmlToMarkdown(html: string, images: PRDImage[]): string {
   let md = html;
 
   // Replace headings
@@ -68,6 +69,22 @@ function htmlToMarkdown(html: string): string {
   // Horizontal rules
   md = md.replace(/<hr\s*\/?>/gi, "\n---\n\n");
 
+  // Extract images into separate array, replace with markdown placeholder
+  md = md.replace(/<img[^>]+>/gi, (match) => {
+    const srcMatch = match.match(/src="([^"]+)"/);
+    const altMatch = match.match(/alt="([^"]*)"/);
+    if (srcMatch) {
+      const id = `prd-img-${images.length}`;
+      images.push({
+        id,
+        src: srcMatch[1],
+        alt: altMatch ? altMatch[1] : "",
+      });
+      return `\n\n![${altMatch ? altMatch[1] : ""}](${id})\n\n`;
+    }
+    return "";
+  });
+
   // Strip remaining HTML tags
   md = md.replace(/<[^>]+>/g, "");
 
@@ -116,6 +133,12 @@ function splitIntoSections(text: string): PRDSection[] {
   };
 
   for (const line of lines) {
+    // Skip heading detection for lines that are part of embedded images/data
+    if (line.includes("<img") || line.includes("base64,") || line.includes("data:image")) {
+      currentContent.push(line);
+      continue;
+    }
+
     // Only split on # and ## (top-level headings) — keep ### and below in content
     const topLevelHeading = line.match(/^#{1,2}\s+(.+)/);
     // Don't match ### or deeper as section boundaries
@@ -213,6 +236,7 @@ export async function POST(req: NextRequest) {
 
     const buffer = Buffer.from(await file.arrayBuffer());
     let rawText = "";
+    const images: PRDImage[] = [];
 
     if (ext === "pdf") {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -223,7 +247,7 @@ export async function POST(req: NextRequest) {
       // Use convertToHtml to preserve headings, lists, bold/italic, etc.
       const mammoth = await import("mammoth");
       const result = await mammoth.convertToHtml({ buffer });
-      rawText = htmlToMarkdown(result.value);
+      rawText = htmlToMarkdown(result.value, images);
     }
 
     if (!rawText.trim()) {
@@ -236,7 +260,7 @@ export async function POST(req: NextRequest) {
     const title = extractTitle(rawText, filename);
     const sections = splitIntoSections(rawText);
 
-    const parsed: ParsedPRD = { title, sections, rawText };
+    const parsed: ParsedPRD = { title, sections, rawText, images };
     return NextResponse.json(parsed);
   } catch (error: any) {
     console.error("PRD parse error:", error);

@@ -7,10 +7,17 @@ export interface PRDSection {
   index: number;
 }
 
+export interface PRDImage {
+  id: string;
+  src: string;
+  alt: string;
+}
+
 export interface ParsedPRD {
   title: string;
   sections: PRDSection[];
   rawText: string;
+  images: PRDImage[];
 }
 
 export interface PRDComment {

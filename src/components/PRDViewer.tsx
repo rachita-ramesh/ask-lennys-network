@@ -1,11 +1,12 @@
 "use client";
 import ReactMarkdown from "react-markdown";
-import { PRDSection, PRDComment } from "@/lib/prd-types";
+import { PRDSection, PRDComment, PRDImage } from "@/lib/prd-types";
 
 interface Props {
   title: string;
   sections: PRDSection[];
   comments: PRDComment[];
+  images: PRDImage[];
   activeSectionId: string | null;
   onSectionClick: (sectionId: string) => void;
 }
@@ -14,9 +15,13 @@ export default function PRDViewer({
   title,
   sections,
   comments,
+  images,
   activeSectionId,
   onSectionClick,
 }: Props) {
+  // Build a map from image ID to base64 src for fast lookup
+  const imageMap = new Map(images.map((img) => [img.id, img]));
+
   const commentCountBySection = new Map<string, number>();
   for (const c of comments) {
     if (c.parentId === null) {
@@ -115,7 +120,26 @@ export default function PRDViewer({
                 </h2>
               )}
               <div className="prd-document-content">
-                <ReactMarkdown>{section.content}</ReactMarkdown>
+                <ReactMarkdown
+                  components={{
+                    img: ({ src, alt }) => {
+                      const img = typeof src === "string" ? imageMap.get(src) : null;
+                      if (img) {
+                        return (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={img.src}
+                            alt={img.alt || alt || ""}
+                            style={{ maxWidth: "100%", height: "auto", borderRadius: "8px", margin: "1rem 0" }}
+                          />
+                        );
+                      }
+                      return null;
+                    },
+                  }}
+                >
+                  {section.content}
+                </ReactMarkdown>
               </div>
 
               {/* Comment count badge */}
