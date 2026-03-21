@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
-import { getOrCreateUser, hasRemainingFreeQueries, incrementQueryCount } from "./supabase";
+import { getOrCreateUser, hasRemainingFreeQueries, incrementQueryCount, FREE_QUERY_LIMIT } from "./supabase";
 
 export type AuthResult =
   | { ok: true; email: string; apiKey: string | null; useOwnKey: boolean }
@@ -20,7 +20,12 @@ export async function checkAuthAndQuota(
   }
 
   const user = await getOrCreateUser(session.user.email);
-  const hasFree = hasRemainingFreeQueries(user);
+  // For counting routes (select-experts), check strict limit: count < limit
+  // For non-counting routes (review, reply), allow count == limit since
+  // the review was already paid for by select-experts
+  const hasFree = countQuery
+    ? hasRemainingFreeQueries(user)
+    : user.query_count <= FREE_QUERY_LIMIT;
   const apiKey = req.headers.get("x-api-key") || null;
 
   if (!hasFree && !apiKey) {
