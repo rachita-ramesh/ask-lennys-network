@@ -217,7 +217,7 @@ export default function LoginPage() {
           }}
           onMouseEnter={() => setButtonHovered(true)}
           onMouseLeave={() => setButtonHovered(false)}
-          onClick={() => signIn("google", { callbackUrl: "/" })}
+          onClick={() => signIn("google", { callbackUrl: "/review" })}
         >
           <svg width="22" height="22" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
@@ -291,28 +291,6 @@ export default function LoginPage() {
         </div>
       </main>
 
-      {/* Bottom indicator */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "32px",
-          left: 0,
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          paddingBottom: "16px",
-          zIndex: 10,
-        }}
-      >
-        <div
-          style={{
-            width: "48px",
-            height: "6px",
-            backgroundColor: "rgba(42, 49, 34, 0.1)",
-            borderRadius: "9999px",
-          }}
-        />
-      </div>
     </div>
   );
 }

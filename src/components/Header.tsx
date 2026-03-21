@@ -9,7 +9,7 @@ export default function Header() {
   const isBrowse = pathname === "/browse" || pathname.startsWith("/person/");
 
   const navItems = [
-    { label: "Review", href: "/" },
+    { label: "Review", href: "/review" },
     // { label: "Ask", href: "/ask" },
     { label: "People", href: "/browse" },
   ];
@@ -23,7 +23,7 @@ export default function Header() {
       alignItems: "center",
       flexShrink: 0,
     }}>
-      <Link href="/" style={{
+      <Link href="/review" style={{
         fontFamily: "var(--font-serif)",
         fontSize: "1.5rem",
         fontWeight: 400,
@@ -51,7 +51,7 @@ export default function Header() {
       <nav style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
         {navItems.map((item) => {
           const isActive =
-            (item.href === "/" && pathname === "/") ||
+            (item.href === "/review" && pathname === "/review") ||
             (item.href === "/ask" && pathname === "/ask") ||
             (item.href === "/browse" && isBrowse);
 
@@ -87,7 +87,7 @@ export default function Header() {
         })}
         {session?.user && (
           <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
+            onClick={() => signOut({ callbackUrl: "/" })}
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: "0.7rem",
