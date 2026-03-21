@@ -6,6 +6,7 @@ import PRDExpertBar from "./PRDExpertBar";
 import PRDViewer from "./PRDViewer";
 import PRDCommentsPanel from "./PRDCommentsPanel";
 import ApiKeyForm from "./ApiKeyForm";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function PRDReviewLayout() {
   const {
@@ -24,6 +25,8 @@ export default function PRDReviewLayout() {
 
   const [expertFilter, setExpertFilter] = useState<string | null>(null);
   const [needsApiKey, setNeedsApiKey] = useState(false);
+  const [mobileTab, setMobileTab] = useState<"document" | "comments">("document");
+  const isMobile = useIsMobile();
 
   const isLoading =
     phase === "uploading" || phase === "parsing" || phase === "selecting";
@@ -131,7 +134,7 @@ export default function PRDReviewLayout() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 1.5rem",
+          padding: isMobile ? "0 0.75rem" : "0 1.5rem",
           flexShrink: 0,
           borderBottom: "1px solid rgba(42, 49, 34, 0.08)",
         }}
@@ -145,7 +148,7 @@ export default function PRDReviewLayout() {
           onClick={reset}
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: "0.8rem",
+            fontSize: isMobile ? "0.65rem" : "0.8rem",
             textTransform: "uppercase",
             letterSpacing: "0.1em",
             color: "#5F6854",
@@ -153,54 +156,67 @@ export default function PRDReviewLayout() {
             border: "none",
             cursor: "pointer",
             padding: "0.5rem",
+            whiteSpace: "nowrap",
           }}
         >
           New Review
         </button>
       </div>
 
-      {/* Split pane: document left, comments right */}
-      <div
-        style={{
+      {/* Mobile: Tab bar */}
+      {isMobile && (
+        <div style={{
           display: "flex",
-          flex: 1,
-          minHeight: 0,
-        }}
-      >
-        {/* Left: PRD document */}
-        {parsedPRD && (
-          <PRDViewer
-            title={parsedPRD.title}
-            sections={parsedPRD.sections}
-            comments={allComments}
-            images={parsedPRD.images || []}
-            activeSectionId={activeSectionId}
-            onSectionClick={(id) =>
-              setActiveSectionId(activeSectionId === id ? null : id)
-            }
-          />
-        )}
+          flexShrink: 0,
+          borderBottom: "1px solid rgba(42, 49, 34, 0.08)",
+        }}>
+          {(["document", "comments"] as const).map((tab) => {
+            const isActive = mobileTab === tab;
+            const commentCount = allComments.filter(c => c.parentId === null).length;
+            const label = tab === "document" ? "Document" : `Comments (${commentCount})`;
+            return (
+              <button
+                key={tab}
+                onClick={() => setMobileTab(tab)}
+                style={{
+                  flex: 1,
+                  padding: "0.75rem",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.75rem",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  color: isActive ? "#D45D48" : "#5F6854",
+                  background: "none",
+                  border: "none",
+                  borderBottom: isActive ? "2px solid #D45D48" : "2px solid transparent",
+                  cursor: "pointer",
+                  fontWeight: isActive ? 600 : 400,
+                }}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
-        {/* Divider */}
-        <div
-          style={{
-            width: "1px",
-            background: "rgba(42, 49, 34, 0.1)",
-            flexShrink: 0,
-          }}
-        />
-
-        {/* Right: Comments */}
-        {parsedPRD && (
-          <div
-            style={{
-              width: "420px",
-              flexShrink: 0,
-              display: "flex",
-              flexDirection: "column",
-              minHeight: 0,
-            }}
-          >
+      {/* Content area */}
+      {isMobile ? (
+        /* Mobile: show one tab at a time */
+        <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+          {parsedPRD && mobileTab === "document" && (
+            <PRDViewer
+              title={parsedPRD.title}
+              sections={parsedPRD.sections}
+              comments={allComments}
+              images={parsedPRD.images || []}
+              activeSectionId={activeSectionId}
+              onSectionClick={(id) =>
+                setActiveSectionId(activeSectionId === id ? null : id)
+              }
+            />
+          )}
+          {parsedPRD && mobileTab === "comments" && (
             <PRDCommentsPanel
               sections={parsedPRD.sections}
               comments={allComments}
@@ -209,9 +225,38 @@ export default function PRDReviewLayout() {
               onReply={replyToComment}
               replyStreamingId={replyStreaming}
             />
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        /* Desktop: split pane */
+        <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
+          {parsedPRD && (
+            <PRDViewer
+              title={parsedPRD.title}
+              sections={parsedPRD.sections}
+              comments={allComments}
+              images={parsedPRD.images || []}
+              activeSectionId={activeSectionId}
+              onSectionClick={(id) =>
+                setActiveSectionId(activeSectionId === id ? null : id)
+              }
+            />
+          )}
+          <div style={{ width: "1px", background: "rgba(42, 49, 34, 0.1)", flexShrink: 0 }} />
+          {parsedPRD && (
+            <div style={{ width: "420px", flexShrink: 0, display: "flex", flexDirection: "column", minHeight: 0 }}>
+              <PRDCommentsPanel
+                sections={parsedPRD.sections}
+                comments={allComments}
+                activeSectionId={activeSectionId}
+                expertFilter={expertFilter}
+                onReply={replyToComment}
+                replyStreamingId={replyStreaming}
+              />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

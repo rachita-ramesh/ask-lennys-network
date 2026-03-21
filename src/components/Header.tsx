@@ -2,10 +2,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function Header() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const isMobile = useIsMobile();
   const isBrowse = pathname === "/browse" || pathname.startsWith("/person/");
 
   const navItems = [
@@ -17,7 +19,7 @@ export default function Header() {
   return (
     <header style={{
       width: "100%",
-      padding: "0.75rem 2.5rem",
+      padding: isMobile ? "0.75rem 1rem" : "0.75rem 2.5rem",
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
@@ -25,7 +27,7 @@ export default function Header() {
     }}>
       <Link href="/review" style={{
         fontFamily: "var(--font-serif)",
-        fontSize: "1.5rem",
+        fontSize: isMobile ? "1.15rem" : "1.5rem",
         fontWeight: 400,
         color: "#2A3122",
         textDecoration: "none",
@@ -37,8 +39,8 @@ export default function Header() {
         <svg
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
+          width={isMobile ? 18 : 20}
+          height={isMobile ? 18 : 20}
           fill="none"
           stroke="#D45D48"
           strokeWidth="2"
@@ -46,9 +48,9 @@ export default function Header() {
         >
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
-        Lenny&apos;s Network
+        {isMobile ? "Lenny\u2019s" : "Lenny\u2019s Network"}
       </Link>
-      <nav style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+      <nav style={{ display: "flex", gap: isMobile ? "0.75rem" : "2rem", alignItems: "center" }}>
         {navItems.map((item) => {
           const isActive =
             (item.href === "/review" && pathname === "/review") ||
@@ -61,7 +63,7 @@ export default function Header() {
               href={item.href}
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "0.875rem",
+                fontSize: isMobile ? "0.75rem" : "0.875rem",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 textDecoration: "none",
@@ -87,12 +89,12 @@ export default function Header() {
         })}
         {session?.user && (
           <>
-            <div style={{ width: "1px", height: "20px", background: "rgba(42, 49, 34, 0.15)", marginLeft: "0.5rem" }} />
+            <div style={{ width: "1px", height: "20px", background: "rgba(42, 49, 34, 0.15)" }} />
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "0.875rem",
+                fontSize: isMobile ? "0.75rem" : "0.875rem",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 color: "#a8a29e",
@@ -105,7 +107,7 @@ export default function Header() {
                 gap: "0.5rem",
               }}
             >
-              Sign out
+              {!isMobile && "Sign out"}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                 <polyline points="16 17 21 12 16 7" />

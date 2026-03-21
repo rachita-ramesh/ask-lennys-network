@@ -6,6 +6,7 @@ import QuestionInput from "@/components/QuestionInput";
 import AnswerPanel from "@/components/AnswerPanel";
 import Header from "@/components/Header";
 import { useStreamingResponse } from "@/hooks/useStreamingResponse";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Props {
   person: Person;
@@ -25,6 +26,7 @@ function initials(name: string): string {
 }
 
 export default function PersonQuestion({ person }: Props) {
+  const isMobile = useIsMobile();
   const [asked, setAsked] = useState(false);
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -134,15 +136,49 @@ export default function PersonQuestion({ person }: Props) {
     }}>
       <Header />
 
-      {/* Two-column layout */}
+      {/* Layout */}
       <div style={{
         display: "flex",
+        flexDirection: isMobile ? "column" : "row",
         flex: 1,
         minHeight: 0,
-        gap: "2rem",
-        padding: "0 2.5rem 2.5rem",
+        gap: isMobile ? "0" : "2rem",
+        padding: isMobile ? "0 0.75rem 0.75rem" : "0 2.5rem 2.5rem",
       }}>
-        {/* Left panel — person profile */}
+        {/* Mobile: compact profile bar */}
+        {isMobile ? (
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.75rem",
+            padding: "0.75rem 1rem",
+            background: "#F6F4F0",
+            borderRadius: "16px",
+            marginBottom: "0.75rem",
+            border: "1px solid rgba(255, 255, 255, 0.6)",
+          }}>
+            <div style={{
+              width: "40px", height: "40px", borderRadius: "50%",
+              background: avatarColor(person.name),
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: "#fff", fontSize: "0.875rem", fontFamily: "var(--font-serif)",
+              flexShrink: 0,
+            }}>
+              {initials(person.name)}
+            </div>
+            <div>
+              <div style={{ fontSize: "1rem", fontFamily: "var(--font-serif)", color: "#1c1917", fontWeight: 400 }}>
+                {person.name}
+              </div>
+              {person.title && (
+                <div style={{ fontSize: "0.65rem", color: "#78716c", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                  {person.title}
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+        /* Desktop: full profile sidebar */
         <aside style={{
           width: "360px",
           flexShrink: 0,
@@ -357,8 +393,9 @@ export default function PersonQuestion({ person }: Props) {
             </div>
           </div>
         </aside>
+        )}
 
-        {/* Right side — chat */}
+        {/* Chat */}
         <div style={{
           flex: 1,
           minWidth: 0,

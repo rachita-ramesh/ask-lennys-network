@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function LoginPage() {
   const [buttonHovered, setButtonHovered] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <div
@@ -17,79 +19,19 @@ export default function LoginPage() {
         overflow: "hidden",
       }}
     >
-      {/* Rust blob */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-15%",
-          left: "-10%",
-          width: "50%",
-          height: "60%",
-          backgroundColor: "#D45D48",
-          opacity: 0.03,
-          filter: "blur(120px)",
-          borderRadius: "50%",
-          pointerEvents: "none",
-          mixBlendMode: "multiply",
-        }}
-      />
-
-      {/* Sage blob */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-15%",
-          right: "-5%",
-          width: "60%",
-          height: "70%",
-          backgroundColor: "#5F6854",
-          opacity: 0.04,
-          filter: "blur(150px)",
-          borderRadius: "50%",
-          pointerEvents: "none",
-          mixBlendMode: "multiply",
-        }}
-      />
-
-      {/* Decorative rotating cards */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          pointerEvents: "none",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            width: "900px",
-            height: "650px",
-            border: "1px solid rgba(42, 49, 34, 0.08)",
-            borderRadius: "40px",
-            transform: "rotate(-2deg) scale(1.05)",
-            opacity: 0.6,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            width: "880px",
-            height: "630px",
-            border: "1px solid rgba(255, 255, 255, 0.5)",
-            background: "rgba(255, 255, 255, 0.05)",
-            borderRadius: "40px",
-            transform: "rotate(1.5deg)",
-            opacity: 0.8,
-            backdropFilter: "blur(2px)",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
-          }}
-        />
-      </div>
+      {!isMobile && (
+        <>
+          {/* Rust blob */}
+          <div style={{ position: "absolute", top: "-15%", left: "-10%", width: "50%", height: "60%", backgroundColor: "#D45D48", opacity: 0.03, filter: "blur(120px)", borderRadius: "50%", pointerEvents: "none", mixBlendMode: "multiply" }} />
+          {/* Sage blob */}
+          <div style={{ position: "absolute", bottom: "-15%", right: "-5%", width: "60%", height: "70%", backgroundColor: "#5F6854", opacity: 0.04, filter: "blur(150px)", borderRadius: "50%", pointerEvents: "none", mixBlendMode: "multiply" }} />
+          {/* Decorative rotating cards */}
+          <div style={{ position: "absolute", inset: 0, zIndex: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none", overflow: "hidden" }}>
+            <div style={{ position: "absolute", width: "900px", height: "650px", border: "1px solid rgba(42, 49, 34, 0.08)", borderRadius: "40px", transform: "rotate(-2deg) scale(1.05)", opacity: 0.6 }} />
+            <div style={{ position: "absolute", width: "880px", height: "630px", border: "1px solid rgba(255, 255, 255, 0.5)", background: "rgba(255, 255, 255, 0.05)", borderRadius: "40px", transform: "rotate(1.5deg)", opacity: 0.8, backdropFilter: "blur(2px)", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }} />
+          </div>
+        </>
+      )}
 
       {/* Header */}
       <header
@@ -157,7 +99,7 @@ export default function LoginPage() {
           <h1
             style={{
               fontFamily: "var(--font-serif)",
-              fontSize: "clamp(3.5rem, 6vw, 5.5rem)",
+              fontSize: isMobile ? "clamp(2rem, 10vw, 3rem)" : "clamp(3.5rem, 6vw, 5.5rem)",
               lineHeight: 1,
               color: "#2A3122",
               letterSpacing: "-0.03em",
@@ -240,7 +182,7 @@ export default function LoginPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(240px, 1fr))",
               gap: "24px",
               maxWidth: "896px",
               margin: "0 auto",

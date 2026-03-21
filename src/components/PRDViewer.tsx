@@ -2,6 +2,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PRDSection, PRDComment, PRDImage } from "@/lib/prd-types";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Props {
   title: string;
@@ -20,6 +21,7 @@ export default function PRDViewer({
   activeSectionId,
   onSectionClick,
 }: Props) {
+  const isMobile = useIsMobile();
   // Build a map from image ID to base64 src for fast lookup
   const imageMap = new Map(images.map((img) => [img.id, img]));
 
@@ -38,7 +40,7 @@ export default function PRDViewer({
       style={{
         flex: 1,
         overflowY: "auto",
-        padding: "1.5rem 1.5rem",
+        padding: isMobile ? "0.75rem" : "1.5rem 1.5rem",
         minWidth: 0,
       }}
     >
@@ -51,13 +53,13 @@ export default function PRDViewer({
           borderRadius: "12px",
           border: "1px solid rgba(42, 49, 34, 0.08)",
           boxShadow: "0 2px 20px rgba(0,0,0,0.04)",
-          padding: "2.5rem 2.5rem",
+          padding: isMobile ? "1.25rem 1rem" : "2.5rem 2.5rem",
         }}
       >
         <h1
           style={{
             fontFamily: "var(--font-serif)",
-            fontSize: "2rem",
+            fontSize: isMobile ? "1.5rem" : "2rem",
             fontWeight: 400,
             color: "#1c1917",
             marginBottom: "0.5rem",

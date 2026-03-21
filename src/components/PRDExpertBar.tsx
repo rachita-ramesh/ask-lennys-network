@@ -1,6 +1,7 @@
 "use client";
 import { ExpertReview } from "@/lib/prd-types";
 import { avatarColor, initials } from "@/lib/ui-utils";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Props {
   experts: ExpertReview[];
@@ -13,29 +14,35 @@ export default function PRDExpertBar({
   activeFilter,
   onFilter,
 }: Props) {
+  const isMobile = useIsMobile();
+
   return (
     <div
       style={{
         display: "flex",
-        gap: "0.75rem",
+        gap: isMobile ? "0.5rem" : "0.75rem",
         padding: "0.75rem 0",
         flexShrink: 0,
-        flexWrap: "wrap",
+        flexWrap: isMobile ? "nowrap" : "wrap",
         alignItems: "center",
-      }}
+        overflowX: isMobile ? "auto" : undefined,
+        WebkitOverflowScrolling: isMobile ? "touch" : undefined,
+      } as React.CSSProperties}
     >
-      <span
-        style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: "0.75rem",
-          textTransform: "uppercase",
-          letterSpacing: "0.15em",
-          color: "#a8a29e",
-          fontWeight: 700,
-        }}
-      >
-        Reviewers
-      </span>
+      {!isMobile && (
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.75rem",
+            textTransform: "uppercase",
+            letterSpacing: "0.15em",
+            color: "#a8a29e",
+            fontWeight: 700,
+          }}
+        >
+          Reviewers
+        </span>
+      )}
       {experts.map((er) => {
         const isActive = activeFilter === er.expert.slug;
         const bg = avatarColor(er.expert.name);
@@ -81,9 +88,9 @@ export default function PRDExpertBar({
                   color: "#2A3122",
                 }}
               >
-                {er.expert.name}
+                {isMobile ? er.expert.name.split(" ")[0] : er.expert.name}
               </span>
-              {er.expert.title && (
+              {!isMobile && er.expert.title && (
                 <span
                   style={{
                     fontSize: "0.7rem",
