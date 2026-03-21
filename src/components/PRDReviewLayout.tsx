@@ -30,29 +30,7 @@ export default function PRDReviewLayout() {
 
   // Detect quota exceeded error
   const isQuotaError = error?.includes("free reviews") || error?.includes("API key");
-
-  // Show API key form when quota exceeded
-  if (phase === "idle" && (needsApiKey || isQuotaError)) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1,
-          padding: "0 2rem",
-        }}
-      >
-        <ApiKeyForm
-          onSuccess={() => {
-            setNeedsApiKey(false);
-            reset();
-          }}
-        />
-      </div>
-    );
-  }
+  const showApiKeyModal = phase === "idle" && (needsApiKey || isQuotaError);
 
   // Loading state — animated visuals
   if (isLoading) {
@@ -115,7 +93,7 @@ export default function PRDReviewLayout() {
 
         <PRDUploader onUpload={uploadAndReview} isLoading={false} />
 
-        {error && (
+        {error && !isQuotaError && (
           <div
             style={{
               padding: "1rem 1.5rem",
@@ -131,6 +109,8 @@ export default function PRDReviewLayout() {
             {error}
           </div>
         )}
+
+        {showApiKeyModal && <ApiKeyModal onSuccess={() => { setNeedsApiKey(false); reset(); }} />}
       </div>
     );
   }
@@ -231,6 +211,38 @@ export default function PRDReviewLayout() {
             />
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+/* ── API Key Modal ── */
+
+function ApiKeyModal({ onSuccess }: { onSuccess: () => void }) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 1000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {/* Blurred backdrop */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          background: "rgba(234, 232, 223, 0.7)",
+        }}
+      />
+      {/* Modal content */}
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <ApiKeyForm onSuccess={onSuccess} />
       </div>
     </div>
   );
