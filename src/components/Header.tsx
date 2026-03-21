@@ -86,23 +86,33 @@ export default function Header() {
           );
         })}
         {session?.user && (
-          <button
-            onClick={() => signOut({ callbackUrl: "/" })}
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.7rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              color: "#a8a29e",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: "0.25rem 0.5rem",
-              marginLeft: "0.5rem",
-            }}
-          >
-            Sign out
-          </button>
+          <>
+            <div style={{ width: "1px", height: "20px", background: "rgba(42, 49, 34, 0.15)", marginLeft: "0.5rem" }} />
+            <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.875rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+                color: "#a8a29e",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "0.25rem 0.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              Sign out
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </button>
+          </>
         )}
       </nav>
     </header>
