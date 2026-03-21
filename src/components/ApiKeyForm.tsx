@@ -55,7 +55,7 @@ export default function ApiKeyForm({ onSuccess }: Props) {
           marginBottom: "1.5rem",
         }}
       >
-        You&apos;ve used your 3 free reviews. Add your Anthropic API key for
+        You&apos;ve used your 3 free reviews. Add your own Anthropic API key for
         unlimited reviews.
       </p>
 

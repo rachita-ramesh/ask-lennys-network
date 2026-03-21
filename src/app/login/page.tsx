@@ -95,7 +95,7 @@ export default function LoginPage() {
       <header
         style={{
           position: "absolute",
-          top: "40px",
+          top: "24px",
           left: 0,
           width: "100%",
           display: "flex",
@@ -142,7 +142,7 @@ export default function LoginPage() {
           textAlign: "center",
           zIndex: 10,
           position: "relative",
-          paddingTop: "64px",
+          paddingTop: "32px",
         }}
       >
         <div
@@ -161,7 +161,7 @@ export default function LoginPage() {
               lineHeight: 1,
               color: "#2A3122",
               letterSpacing: "-0.03em",
-              marginBottom: "1.5rem",
+              marginBottom: "1rem",
               fontWeight: 400,
             }}
           >
@@ -181,7 +181,7 @@ export default function LoginPage() {
               maxWidth: "500px",
               margin: "0 auto",
               lineHeight: 1.6,
-              marginBottom: "3.5rem",
+              marginBottom: "2.5rem",
             }}
           >
             Upload your product requirements document and get specific,
@@ -232,8 +232,8 @@ export default function LoginPage() {
         <div
           style={{
             width: "100%",
-            marginTop: "80px",
-            paddingTop: "40px",
+            marginTop: "3rem",
+            paddingTop: "1.5rem",
             borderTop: "1px solid rgba(42, 49, 34, 0.1)",
           }}
         >
@@ -269,7 +269,7 @@ export default function LoginPage() {
                 </svg>
               }
               title="Unlimited Use"
-              description="Bring your own API key for unlimited access."
+              description="Bring your own Anthropic API key for unlimited access."
               iconBg="rgba(212, 93, 72, 0.1)"
               iconBorder="rgba(212, 93, 72, 0.2)"
               iconColor="#D45D48"
@@ -282,7 +282,7 @@ export default function LoginPage() {
                 </svg>
               }
               title="Fully Secure"
-              description="Your API key is never stored on our servers."
+              description="Your Anthropic API key is never stored on our servers."
               iconBg="rgba(42, 49, 34, 0.05)"
               iconBorder="rgba(42, 49, 34, 0.1)"
               iconColor="#5F6854"
