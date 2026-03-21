@@ -7,6 +7,12 @@ import {
   ExpertReview,
 } from "@/lib/prd-types";
 
+function getApiKeyHeader(): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  const key = localStorage.getItem("anthropic-api-key");
+  return key ? { "x-api-key": key } : {};
+}
+
 type Phase =
   | "idle"
   | "uploading"
@@ -54,7 +60,7 @@ export function usePRDReview() {
       setPhase("selecting");
       const selectRes = await fetch("/api/prd/select-experts", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getApiKeyHeader() },
         body: JSON.stringify({ prdText: parsed.rawText, title: parsed.title }),
       });
 
@@ -180,7 +186,7 @@ export function usePRDReview() {
       try {
         const res = await fetch("/api/prd/reply", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...getApiKeyHeader() },
           body: JSON.stringify({
             personSlug: comment.expert.slug,
             sectionContent: section.content,
@@ -273,7 +279,7 @@ async function streamExpertReview(
 ): Promise<void> {
   const res = await fetch("/api/prd/review", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getApiKeyHeader() },
     body: JSON.stringify({
       personSlug: expert.slug,
       prdTitle: prd.title,

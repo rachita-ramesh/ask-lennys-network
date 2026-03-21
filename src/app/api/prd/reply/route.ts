@@ -1,11 +1,20 @@
 import { NextRequest } from "next/server";
-import client from "@/lib/claude";
+import { getClient } from "@/lib/claude";
 import { getPersonBySlug } from "@/lib/people";
 import { getRelevantChunks } from "@/lib/content";
 import { prdReplyPrompt } from "@/lib/prd-prompts";
+import { checkAuthAndQuota } from "@/lib/auth-check";
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await checkAuthAndQuota(req, false);
+    if (!auth.ok) {
+      return new Response(JSON.stringify({ error: auth.error }), {
+        status: auth.status,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     const {
       personSlug,
       sectionContent,
@@ -49,7 +58,8 @@ export async function POST(req: NextRequest) {
       userMessage
     );
 
-    const stream = client.messages.stream({
+    const claude = getClient(auth.apiKey);
+    const stream = claude.messages.stream({
       model: "claude-sonnet-4-6",
       max_tokens: 1024,
       temperature: 0.5,

@@ -5,6 +5,7 @@ import PRDUploader from "./PRDUploader";
 import PRDExpertBar from "./PRDExpertBar";
 import PRDViewer from "./PRDViewer";
 import PRDCommentsPanel from "./PRDCommentsPanel";
+import ApiKeyForm from "./ApiKeyForm";
 
 export default function PRDReviewLayout() {
   const {
@@ -22,9 +23,36 @@ export default function PRDReviewLayout() {
   } = usePRDReview();
 
   const [expertFilter, setExpertFilter] = useState<string | null>(null);
+  const [needsApiKey, setNeedsApiKey] = useState(false);
 
   const isLoading =
     phase === "uploading" || phase === "parsing" || phase === "selecting";
+
+  // Detect quota exceeded error
+  const isQuotaError = error?.includes("free reviews") || error?.includes("API key");
+
+  // Show API key form when quota exceeded
+  if (phase === "idle" && (needsApiKey || isQuotaError)) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          flex: 1,
+          padding: "0 2rem",
+        }}
+      >
+        <ApiKeyForm
+          onSuccess={() => {
+            setNeedsApiKey(false);
+            reset();
+          }}
+        />
+      </div>
+    );
+  }
 
   // Loading state — animated visuals
   if (isLoading) {

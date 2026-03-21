@@ -5,3 +5,10 @@ const client = new Anthropic({
 });
 
 export default client;
+
+export function getClient(apiKey?: string | null): Anthropic {
+  if (apiKey) {
+    return new Anthropic({ apiKey });
+  }
+  return client;
+}

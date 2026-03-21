@@ -1,12 +1,21 @@
 import { NextRequest } from "next/server";
-import client from "@/lib/claude";
+import { getClient } from "@/lib/claude";
 import { getPersonBySlug } from "@/lib/people";
 import { getRelevantChunks } from "@/lib/content";
 import { prdReviewPrompt } from "@/lib/prd-prompts";
 import { PRDSection } from "@/lib/prd-types";
+import { checkAuthAndQuota } from "@/lib/auth-check";
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await checkAuthAndQuota(req, false); // don't count — select-experts already counted
+    if (!auth.ok) {
+      return new Response(JSON.stringify({ error: auth.error }), {
+        status: auth.status,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     const { personSlug, prdTitle, sections } = (await req.json()) as {
       personSlug: string;
       prdTitle: string;
@@ -54,7 +63,8 @@ export async function POST(req: NextRequest) {
       sectionsText
     );
 
-    const stream = client.messages.stream({
+    const claude = getClient(auth.apiKey);
+    const stream = claude.messages.stream({
       model: "claude-sonnet-4-6",
       max_tokens: 4096,
       temperature: 0.5,

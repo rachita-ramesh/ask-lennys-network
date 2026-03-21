@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
   const pathname = usePathname();
+  const { data: session } = useSession();
   const isBrowse = pathname === "/browse" || pathname.startsWith("/person/");
 
   const navItems = [
@@ -46,7 +48,7 @@ export default function Header() {
         </svg>
         Lenny&apos;s Network
       </Link>
-      <nav style={{ display: "flex", gap: "2rem" }}>
+      <nav style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
         {navItems.map((item) => {
           const isActive =
             (item.href === "/" && pathname === "/") ||
@@ -83,6 +85,25 @@ export default function Header() {
             </Link>
           );
         })}
+        {session?.user && (
+          <button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.7rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              color: "#a8a29e",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "0.25rem 0.5rem",
+              marginLeft: "0.5rem",
+            }}
+          >
+            Sign out
+          </button>
+        )}
       </nav>
     </header>
   );

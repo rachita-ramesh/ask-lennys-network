@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import client from "@/lib/claude";
+import { getClient } from "@/lib/claude";
 import { getPeopleMetaString, getPersonBySlug } from "@/lib/people";
 import { prdExpertSelectionPrompt } from "@/lib/prd-prompts";
+import { checkAuthAndQuota } from "@/lib/auth-check";
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await checkAuthAndQuota(req, true); // count this as a query
+    if (!auth.ok) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status });
+    }
+
     const { prdText, title } = await req.json();
     if (!prdText || !title) {
       return NextResponse.json(
@@ -21,7 +27,8 @@ export async function POST(req: NextRequest) {
     const peopleMetaJson = getPeopleMetaString();
     const prompt = prdExpertSelectionPrompt(peopleMetaJson, title, summary);
 
-    const response = await client.messages.create({
+    const claude = getClient(auth.apiKey);
+    const response = await claude.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 1024,
       temperature: 0.3,
