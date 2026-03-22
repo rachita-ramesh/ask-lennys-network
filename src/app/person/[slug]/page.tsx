@@ -43,7 +43,7 @@ export default async function PersonPage({
       minHeight: "100vh",
     }}>
       <Header />
-      <div style={{ width: "100%", maxWidth: "740px", margin: "0 auto", padding: "0 2rem" }}>
+      <div style={{ width: "100%", maxWidth: "740px", margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem)" }}>
 
         <main>
           <Link
@@ -56,7 +56,7 @@ export default async function PersonPage({
               color: "#D45D48",
               textDecoration: "none",
               display: "inline-block",
-              marginBottom: "2rem",
+              marginBottom: "1rem",
             }}
           >
             &larr; Back to browse
@@ -67,8 +67,8 @@ export default async function PersonPage({
             border: "1px solid rgba(42, 49, 34, 0.15)",
             borderRadius: "12px",
             background: "rgba(255,255,255,0.3)",
-            padding: "2rem",
-            marginBottom: "2.5rem",
+            padding: "clamp(1rem, 3vw, 2rem)",
+            marginBottom: "1.5rem",
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
               <div style={{
@@ -89,7 +89,7 @@ export default async function PersonPage({
               <div>
                 <h1 style={{
                   fontFamily: "var(--font-serif)",
-                  fontSize: "2rem",
+                  fontSize: "clamp(1.5rem, 4vw, 2rem)",
                   fontWeight: 400,
                   color: "#2A3122",
                   lineHeight: 1.1,
@@ -111,7 +111,7 @@ export default async function PersonPage({
             </div>
 
             {person.description && (
-              <p style={{ fontSize: "1rem", color: "#5F6854", lineHeight: 1.6, marginBottom: "1.25rem" }}>
+              <p style={{ fontSize: "0.9rem", color: "#5F6854", lineHeight: 1.6, marginBottom: "1rem" }}>
                 {person.description}
               </p>
             )}
@@ -176,7 +176,7 @@ export default async function PersonPage({
             <div style={{
               display: "flex",
               alignItems: "center",
-              marginBottom: "1.5rem",
+              marginBottom: "1rem",
               gap: "1rem",
             }}>
               <span style={{

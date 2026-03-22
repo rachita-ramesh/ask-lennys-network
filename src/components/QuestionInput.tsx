@@ -1,5 +1,6 @@
 "use client";
 import { useState, FormEvent } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Props {
   onSubmit: (question: string) => void;
@@ -12,6 +13,7 @@ export default function QuestionInput({ onSubmit, isLoading, initialValue = "", 
   const [value, setValue] = useState(initialValue);
   const [isFocused, setIsFocused] = useState(false);
   const [btnHovered, setBtnHovered] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -67,9 +69,10 @@ export default function QuestionInput({ onSubmit, isLoading, initialValue = "", 
             flex: 1,
             border: "none",
             background: "transparent",
-            padding: "1rem 1rem 1rem 3.5rem",
+            padding: isMobile ? "0.75rem 0.75rem 0.75rem 2.75rem" : "1rem 1rem 1rem 3.5rem",
             fontFamily: "var(--font-sans)",
-            fontSize: "1.125rem",
+            fontSize: isMobile ? "0.9rem" : "1.125rem",
+            minWidth: 0,
             color: "#2A3122",
             outline: "none",
             caretColor: "#D45D48",
@@ -85,10 +88,11 @@ export default function QuestionInput({ onSubmit, isLoading, initialValue = "", 
             color: "#fff",
             border: "none",
             borderRadius: "100px",
-            padding: "0 2rem",
+            padding: isMobile ? "0 1.25rem" : "0 2rem",
             fontFamily: "var(--font-sans)",
             fontWeight: 500,
-            fontSize: "1rem",
+            fontSize: isMobile ? "0.85rem" : "1rem",
+            flexShrink: 0,
             cursor: isLoading || !value.trim() ? "not-allowed" : "pointer",
             transition: "background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
             transform: btnHovered ? "scale(0.98)" : "scale(1)",
