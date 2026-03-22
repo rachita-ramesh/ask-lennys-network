@@ -71,7 +71,7 @@ export default function PRDReviewLayout() {
           <h1
             style={{
               fontFamily: "var(--font-serif)",
-              fontSize: isMobile ? "2rem" : "clamp(3.5rem, 6vw, 5.5rem)",
+              fontSize: isMobile ? "2.25rem" : "clamp(3.5rem, 6vw, 5.5rem)",
               fontWeight: 400,
               lineHeight: 1,
               letterSpacing: "-0.03em",

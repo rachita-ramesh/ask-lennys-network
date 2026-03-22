@@ -27,7 +27,7 @@ export default function Header() {
     }}>
       <Link href="/review" style={{
         fontFamily: "var(--font-serif)",
-        fontSize: isMobile ? "1.15rem" : "1.5rem",
+        fontSize: isMobile ? "1.25rem" : "1.5rem",
         fontWeight: 400,
         color: "#2A3122",
         textDecoration: "none",
@@ -48,7 +48,7 @@ export default function Header() {
         >
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
-        {isMobile ? "Lenny\u2019s" : "Lenny\u2019s Network"}
+        Lenny&apos;s Network
       </Link>
       <nav style={{ display: "flex", gap: isMobile ? "0.75rem" : "2rem", alignItems: "center" }}>
         {navItems.map((item) => {
