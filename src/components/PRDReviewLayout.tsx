@@ -331,61 +331,6 @@ function PRDLoadingView({ phase }: { phase: string }) {
     { id: 4, bottom: "106px", left: "66px", width: "40px", height: "40px", delay: "1100ms", name: "MR" },
   ];
 
-  if (isMobile) {
-    return (
-      <div style={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "0 1.5rem",
-      }}>
-        {/* Spinner */}
-        <div style={{ position: "relative", width: "56px", height: "56px", marginBottom: "2.5rem" }}>
-          <svg className="animate-spin" style={{ width: "56px", height: "56px" }} viewBox="0 0 56 56">
-            <circle cx="28" cy="28" r="24" stroke="#e7e5e4" strokeWidth="3" fill="none" />
-            <circle cx="28" cy="28" r="24" stroke="#D45D48" strokeWidth="3" fill="none" strokeDasharray="50 100" strokeLinecap="round" />
-          </svg>
-        </div>
-
-        {/* Steps */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", width: "100%", maxWidth: "280px" }}>
-          {steps.map((step) => {
-            const isDone = step.index < currentStage;
-            const isCurrent = step.index === currentStage;
-            return (
-              <div key={step.index} style={{ display: "flex", alignItems: "center", gap: "0.875rem" }}>
-                <div style={{
-                  width: "24px", height: "24px", borderRadius: "50%",
-                  border: `2px solid ${isDone ? "#6B8E7B" : isCurrent ? "#D45D48" : "#d6d3d1"}`,
-                  background: isDone ? "#6B8E7B" : "transparent",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0, transition: "all 0.4s ease",
-                }}>
-                  {isDone && (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                  )}
-                  {isCurrent && (
-                    <div style={{ width: "10px", height: "10px", border: "2px solid #D45D48", borderTopColor: "transparent", borderRadius: "50%" }} className="animate-spin" />
-                  )}
-                </div>
-                <span style={{
-                  fontSize: "0.9rem",
-                  fontWeight: isCurrent ? 500 : 400,
-                  color: isDone ? "#6B8E7B" : isCurrent ? "#2A3122" : "#a8a29e",
-                  transition: "color 0.4s",
-                }}>
-                  {step.label}{isCurrent && "..."}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div style={{
       flex: 1,
@@ -394,9 +339,10 @@ function PRDLoadingView({ phase }: { phase: string }) {
       alignItems: "center",
       justifyContent: "center",
       position: "relative",
+      overflow: "hidden",
     }}>
       {/* Visual area */}
-      <div style={{ position: "relative", width: "100%", maxWidth: "672px", height: "400px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "4rem" }}>
+      <div style={{ position: "relative", width: "100%", maxWidth: isMobile ? "320px" : "672px", height: isMobile ? "220px" : "400px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "1.5rem" : "4rem", transform: isMobile ? "scale(0.65)" : undefined, transformOrigin: "center center" }}>
 
         {/* Stage 1 — Document Scan */}
         <div className={currentStage === 1 ? "stage-active" : "stage-inactive"} style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", transition: "all 0.7s ease-in-out" }}>
@@ -521,53 +467,87 @@ function PRDLoadingView({ phase }: { phase: string }) {
         </div>
       </div>
 
-      {/* Progress steps — horizontal */}
-      <div style={{ position: "relative", width: "100%", maxWidth: "700px", display: "flex", alignItems: "center", gap: "0" }}>
-        {steps.map((step, i) => {
-          const isDone = step.index < currentStage;
-          const isCurrent = step.index === currentStage;
-          return (
-            <div key={step.index} style={{ display: "flex", alignItems: "center", flex: i < steps.length - 1 ? 1 : undefined }}>
-              {/* Step circle + label */}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.625rem", minWidth: "fit-content" }}>
+      {/* Progress steps */}
+      {isMobile ? (
+        /* Mobile: vertical steps */
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", width: "100%", padding: "0 1.5rem", maxWidth: "300px" }}>
+          {steps.map((step) => {
+            const isDone = step.index < currentStage;
+            const isCurrent = step.index === currentStage;
+            return (
+              <div key={step.index} style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <div style={{
-                  width: "28px", height: "28px", borderRadius: "50%",
+                  width: "24px", height: "24px", borderRadius: "50%",
                   border: `2px solid ${isDone ? "#92A897" : isCurrent ? "#D45D48" : "#E8E3DA"}`,
-                  background: isDone ? "#92A897" : "var(--background, #EAE8DF)",
+                  background: isDone ? "#92A897" : "transparent",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0, zIndex: 10, transition: "all 0.5s ease",
-                  boxShadow: "0 0 0 4px var(--background, #EAE8DF)",
+                  flexShrink: 0, transition: "all 0.5s ease",
                 }}>
                   {isDone && (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
                   )}
                   {isCurrent && (
-                    <div style={{ width: "12px", height: "12px", border: "2px solid #D45D48", borderTopColor: "transparent", borderRadius: "50%" }} className="animate-spin" />
+                    <div style={{ width: "10px", height: "10px", border: "2px solid #D45D48", borderTopColor: "transparent", borderRadius: "50%" }} className="animate-spin" />
                   )}
                 </div>
                 <span style={{
-                  fontSize: "0.75rem", fontWeight: isCurrent ? 600 : 400,
+                  fontSize: "0.85rem", fontWeight: isCurrent ? 500 : 400,
                   color: isDone ? "#92A897" : isCurrent ? "#2D2B2A" : "#9D9891",
                   transition: "color 0.5s",
-                  textAlign: "center",
-                  whiteSpace: "nowrap",
                 }}>
                   {step.label}{isCurrent && "..."}
                 </span>
               </div>
-              {/* Connecting line */}
-              {i < steps.length - 1 && (
-                <div style={{
-                  flex: 1, height: "2px", marginBottom: "1.75rem",
-                  background: isDone ? "#D45D48" : "#E8E3DA",
-                  transition: "background 1s ease",
-                  minWidth: "2rem",
-                }} />
-              )}
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : (
+        /* Desktop: horizontal steps */
+        <div style={{ position: "relative", width: "100%", maxWidth: "700px", display: "flex", alignItems: "center", gap: "0" }}>
+          {steps.map((step, i) => {
+            const isDone = step.index < currentStage;
+            const isCurrent = step.index === currentStage;
+            return (
+              <div key={step.index} style={{ display: "flex", alignItems: "center", flex: i < steps.length - 1 ? 1 : undefined }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.625rem", minWidth: "fit-content" }}>
+                  <div style={{
+                    width: "28px", height: "28px", borderRadius: "50%",
+                    border: `2px solid ${isDone ? "#92A897" : isCurrent ? "#D45D48" : "#E8E3DA"}`,
+                    background: isDone ? "#92A897" : "var(--background, #EAE8DF)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    flexShrink: 0, zIndex: 10, transition: "all 0.5s ease",
+                    boxShadow: "0 0 0 4px var(--background, #EAE8DF)",
+                  }}>
+                    {isDone && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
+                    )}
+                    {isCurrent && (
+                      <div style={{ width: "12px", height: "12px", border: "2px solid #D45D48", borderTopColor: "transparent", borderRadius: "50%" }} className="animate-spin" />
+                    )}
+                  </div>
+                  <span style={{
+                    fontSize: "0.75rem", fontWeight: isCurrent ? 600 : 400,
+                    color: isDone ? "#92A897" : isCurrent ? "#2D2B2A" : "#9D9891",
+                    transition: "color 0.5s",
+                    textAlign: "center",
+                    whiteSpace: "nowrap",
+                  }}>
+                    {step.label}{isCurrent && "..."}
+                  </span>
+                </div>
+                {i < steps.length - 1 && (
+                  <div style={{
+                    flex: 1, height: "2px", marginBottom: "1.75rem",
+                    background: isDone ? "#D45D48" : "#E8E3DA",
+                    transition: "background 1s ease",
+                    minWidth: "2rem",
+                  }} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Bottom progress bar */}
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "4px", background: "#E8E3DA", overflow: "hidden" }}>
