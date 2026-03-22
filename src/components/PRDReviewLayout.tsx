@@ -144,11 +144,13 @@ export default function PRDReviewLayout() {
           borderBottom: "1px solid rgba(42, 49, 34, 0.08)",
         }}
       >
-        <PRDExpertBar
-          experts={experts}
-          activeFilter={expertFilter}
-          onFilter={setExpertFilter}
-        />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <PRDExpertBar
+            experts={experts}
+            activeFilter={expertFilter}
+            onFilter={setExpertFilter}
+          />
+        </div>
         <button
           onClick={reset}
           style={{
