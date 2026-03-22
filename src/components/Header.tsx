@@ -25,7 +25,7 @@ export default function Header() {
       alignItems: "center",
       flexShrink: 0,
     }}>
-      <Link href="/review" style={{
+      <Link href="/" style={{
         fontFamily: "var(--font-serif)",
         fontSize: isMobile ? "1.25rem" : "1.5rem",
         fontWeight: 400,
