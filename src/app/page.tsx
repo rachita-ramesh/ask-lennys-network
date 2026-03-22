@@ -84,7 +84,7 @@ export default function LoginPage() {
           textAlign: "center",
           zIndex: 10,
           position: "relative",
-          paddingTop: "32px",
+          paddingTop: isMobile ? "60px" : "32px",
         }}
       >
         <div
@@ -99,7 +99,7 @@ export default function LoginPage() {
           <h1
             style={{
               fontFamily: "var(--font-serif)",
-              fontSize: isMobile ? "clamp(2rem, 10vw, 3rem)" : "clamp(3.5rem, 6vw, 5.5rem)",
+              fontSize: isMobile ? "2.25rem" : "clamp(3.5rem, 6vw, 5.5rem)",
               lineHeight: 1,
               color: "#2A3122",
               letterSpacing: "-0.03em",
