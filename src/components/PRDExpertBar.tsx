@@ -27,7 +27,7 @@ export default function PRDExpertBar({
         alignItems: "center",
         overflowX: isMobile ? "auto" : undefined,
         minWidth: 0,
-      }
+      }}
     >
       {!isMobile && (
         <span
