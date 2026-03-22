@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import Footer from "@/components/Footer";
 
 export default function LoginPage() {
   const [buttonHovered, setButtonHovered] = useState(false);
@@ -233,6 +234,7 @@ export default function LoginPage() {
         </div>
       </main>
 
+      <Footer />
     </div>
   );
 }

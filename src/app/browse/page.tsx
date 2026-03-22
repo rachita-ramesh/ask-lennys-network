@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import PersonBrowser from "@/components/PersonBrowser";
 import { Person } from "@/lib/types";
 import fs from "fs";
@@ -52,6 +53,7 @@ export default async function BrowsePage() {
           <PersonBrowser people={people} />
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

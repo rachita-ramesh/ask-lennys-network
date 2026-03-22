@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { Person } from "@/lib/types";
 import fs from "fs";
 import path from "path";
@@ -194,6 +195,7 @@ export default async function PersonPage({
           </div>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }
