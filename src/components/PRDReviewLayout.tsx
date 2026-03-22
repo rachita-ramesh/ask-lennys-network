@@ -301,6 +301,7 @@ function ApiKeyModal({ onSuccess }: { onSuccess: () => void }) {
 /* ── Animated loading view ── */
 
 function PRDLoadingView({ phase }: { phase: string }) {
+  const isMobile = useIsMobile();
   const [nodesVisible, setNodesVisible] = useState(false);
 
   const currentStage = phase === "uploading" ? 1 : phase === "parsing" ? 2 : 3;
@@ -326,6 +327,61 @@ function PRDLoadingView({ phase }: { phase: string }) {
     { id: 3, bottom: "96px", right: "56px", width: "48px", height: "48px", delay: "800ms", name: "EM" },
     { id: 4, bottom: "106px", left: "66px", width: "40px", height: "40px", delay: "1100ms", name: "MR" },
   ];
+
+  if (isMobile) {
+    return (
+      <div style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "0 1.5rem",
+      }}>
+        {/* Spinner */}
+        <div style={{ position: "relative", width: "56px", height: "56px", marginBottom: "2.5rem" }}>
+          <svg className="animate-spin" style={{ width: "56px", height: "56px" }} viewBox="0 0 56 56">
+            <circle cx="28" cy="28" r="24" stroke="#e7e5e4" strokeWidth="3" fill="none" />
+            <circle cx="28" cy="28" r="24" stroke="#D45D48" strokeWidth="3" fill="none" strokeDasharray="50 100" strokeLinecap="round" />
+          </svg>
+        </div>
+
+        {/* Steps */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", width: "100%", maxWidth: "280px" }}>
+          {steps.map((step) => {
+            const isDone = step.index < currentStage;
+            const isCurrent = step.index === currentStage;
+            return (
+              <div key={step.index} style={{ display: "flex", alignItems: "center", gap: "0.875rem" }}>
+                <div style={{
+                  width: "24px", height: "24px", borderRadius: "50%",
+                  border: `2px solid ${isDone ? "#6B8E7B" : isCurrent ? "#D45D48" : "#d6d3d1"}`,
+                  background: isDone ? "#6B8E7B" : "transparent",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  flexShrink: 0, transition: "all 0.4s ease",
+                }}>
+                  {isDone && (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                  )}
+                  {isCurrent && (
+                    <div style={{ width: "10px", height: "10px", border: "2px solid #D45D48", borderTopColor: "transparent", borderRadius: "50%" }} className="animate-spin" />
+                  )}
+                </div>
+                <span style={{
+                  fontSize: "0.9rem",
+                  fontWeight: isCurrent ? 500 : 400,
+                  color: isDone ? "#6B8E7B" : isCurrent ? "#2A3122" : "#a8a29e",
+                  transition: "color 0.4s",
+                }}>
+                  {step.label}{isCurrent && "..."}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{
