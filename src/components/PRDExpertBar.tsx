@@ -20,14 +20,14 @@ export default function PRDExpertBar({
     <div
       style={{
         display: "flex",
-        gap: isMobile ? "0.5rem" : "0.75rem",
+        gap: isMobile ? "0.375rem" : "0.75rem",
         padding: "0.75rem 0",
         flexShrink: 0,
         flexWrap: isMobile ? "nowrap" : "wrap",
         alignItems: "center",
         overflowX: isMobile ? "auto" : undefined,
-        WebkitOverflowScrolling: isMobile ? "touch" : undefined,
-      } as React.CSSProperties}
+        minWidth: 0,
+      }
     >
       {!isMobile && (
         <span
@@ -53,8 +53,8 @@ export default function PRDExpertBar({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "0.5rem",
-              padding: "0.375rem 0.75rem 0.375rem 0.375rem",
+              gap: isMobile ? "0.375rem" : "0.5rem",
+              padding: isMobile ? "0.25rem 0.5rem 0.25rem 0.25rem" : "0.375rem 0.75rem 0.375rem 0.375rem",
               borderRadius: "100px",
               border: isActive
                 ? "2px solid #D45D48"
@@ -66,8 +66,8 @@ export default function PRDExpertBar({
           >
             <div
               style={{
-                width: "30px",
-                height: "30px",
+                width: isMobile ? "26px" : "30px",
+                height: isMobile ? "26px" : "30px",
                 borderRadius: "50%",
                 background: bg,
                 color: "#fff",
@@ -83,7 +83,7 @@ export default function PRDExpertBar({
             <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
               <span
                 style={{
-                  fontSize: "0.875rem",
+                  fontSize: isMobile ? "0.75rem" : "0.875rem",
                   fontWeight: 600,
                   color: "#2A3122",
                 }}
