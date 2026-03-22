@@ -119,6 +119,8 @@ export default function PersonBrowser({ people }: Props) {
   const [search, setSearch] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
   const [activeFilter, setActiveFilter] = useState("All");
+  const [page, setPage] = useState(0);
+  const perPage = 12;
 
   const filterCategories = useMemo(() => {
     const counts = new Map<string, number>();
@@ -150,6 +152,14 @@ export default function PersonBrowser({ people }: Props) {
     }
     return result;
   }, [people, search, activeFilter]);
+
+  // Reset page when filters change
+  const totalPages = Math.ceil(filtered.length / perPage);
+  const paged = filtered.slice(page * perPage, (page + 1) * perPage);
+
+  // Reset to first page when search/filter changes
+  const handleSearch = (v: string) => { setSearch(v); setPage(0); };
+  const handleFilter = (f: string) => { setActiveFilter(f); setPage(0); };
 
   return (
     <div>
@@ -183,7 +193,7 @@ export default function PersonBrowser({ people }: Props) {
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearch(e.target.value)}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
             placeholder="Search by name, role, or company..."
@@ -214,7 +224,7 @@ export default function PersonBrowser({ people }: Props) {
           {filterCategories.map((category) => (
             <button
               key={category}
-              onClick={() => setActiveFilter(category)}
+              onClick={() => handleFilter(category)}
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: "0.75rem",
@@ -235,22 +245,79 @@ export default function PersonBrowser({ people }: Props) {
         </div>
       </section>
 
-      {/* Expert grid — 4 columns */}
+      {/* Expert grid */}
       <div style={{
         display: "grid",
         gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
         gap: isMobile ? "0.75rem" : "1.5rem",
-        marginBottom: "5rem",
+        marginBottom: "2rem",
       }}>
-        {filtered.map((person, index) => (
+        {paged.map((person, index) => (
           <BrowsePersonCard
             key={person.slug}
             person={person}
-            delay={0.3 + index * 0.03}
+            delay={0.15 + index * 0.02}
             compact={isMobile}
           />
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "1rem",
+          marginBottom: "3rem",
+        }}>
+          <button
+            onClick={() => { setPage(p => p - 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+            disabled={page === 0}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.75rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              padding: "0.5rem 1.25rem",
+              borderRadius: "100px",
+              border: "1px solid rgba(42, 49, 34, 0.15)",
+              background: page === 0 ? "transparent" : "rgba(255,255,255,0.5)",
+              color: page === 0 ? "#d6d3d1" : "#5F6854",
+              cursor: page === 0 ? "not-allowed" : "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            Previous
+          </button>
+          <span style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.75rem",
+            color: "#5F6854",
+          }}>
+            {page + 1} / {totalPages}
+          </span>
+          <button
+            onClick={() => { setPage(p => p + 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+            disabled={page >= totalPages - 1}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.75rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              padding: "0.5rem 1.25rem",
+              borderRadius: "100px",
+              border: "1px solid rgba(42, 49, 34, 0.15)",
+              background: page >= totalPages - 1 ? "transparent" : "rgba(255,255,255,0.5)",
+              color: page >= totalPages - 1 ? "#d6d3d1" : "#5F6854",
+              cursor: page >= totalPages - 1 ? "not-allowed" : "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
