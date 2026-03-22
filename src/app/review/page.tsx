@@ -7,9 +7,10 @@ export default function ReviewPage() {
   return (
     <AuthGate>
       <div style={{
+        position: "fixed",
+        inset: 0,
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
         overflow: "hidden",
       }}>
         <Header />
