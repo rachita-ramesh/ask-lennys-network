@@ -22,34 +22,23 @@ export default async function BrowsePage() {
       minHeight: "100vh",
     }}>
       <Header />
-      <div style={{ width: "100%", maxWidth: "1120px", margin: "0 auto", padding: "0 2rem", position: "relative", zIndex: 1 }}>
+      <div style={{ width: "100%", maxWidth: "1120px", margin: "0 auto", padding: "0 clamp(1rem, 4vw, 2rem)", position: "relative", zIndex: 1 }}>
         <main>
           {/* Page header — centered */}
-          <div className="animate-fade-up delay-1" style={{ textAlign: "center", marginBottom: "3rem" }}>
-            <span style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.75rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              color: "#D45D48",
-              marginBottom: "1.5rem",
-              display: "block",
-            }}>
-              Expert Directory
-            </span>
+          <div className="animate-fade-up delay-1" style={{ textAlign: "center", marginBottom: "clamp(1.25rem, 3vw, 3rem)" }}>
             <h1 style={{
               fontFamily: "var(--font-serif)",
-              fontSize: "clamp(3.5rem, 6vw, 5.5rem)",
+              fontSize: "clamp(2.25rem, 6vw, 5.5rem)",
               fontWeight: 400,
               lineHeight: 1,
               letterSpacing: "-0.03em",
-              marginBottom: "1.5rem",
+              marginBottom: "clamp(0.75rem, 2vw, 1.5rem)",
               color: "#2A3122",
             }}>
               Meet the <i style={{ fontStyle: "italic", paddingRight: "0.1em" }}>Experts</i>
             </h1>
             <p style={{
-              fontSize: "1.125rem",
+              fontSize: "clamp(0.9rem, 2vw, 1.125rem)",
               color: "#5F6854",
               fontFamily: "var(--font-sans)",
               maxWidth: "500px",
