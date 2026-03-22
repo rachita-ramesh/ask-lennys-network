@@ -14,6 +14,7 @@ export default function Footer() {
         alignItems: "center",
         gap: "0.375rem",
         flexShrink: 0,
+        marginTop: "auto",
         borderTop: "1px solid rgba(42, 49, 34, 0.08)",
       }}
     >
