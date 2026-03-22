@@ -177,8 +177,11 @@ export default function PRDReviewLayout() {
         }}>
           {(["document", "comments"] as const).map((tab) => {
             const isActive = mobileTab === tab;
-            const commentCount = allComments.filter(c => c.parentId === null).length;
-            const label = tab === "document" ? "Document" : `Comments (${commentCount})`;
+            const visibleComments = allComments.filter(c =>
+              c.parentId === null &&
+              (!activeSectionId || c.sectionId === activeSectionId)
+            );
+            const label = tab === "document" ? "Document" : `Comments (${visibleComments.length})`;
             return (
               <button
                 key={tab}
