@@ -344,7 +344,7 @@ function PRDLoadingView({ phase }: { phase: string }) {
       overflow: "hidden",
     }}>
       {/* Visual area */}
-      <div style={{ position: "relative", width: "100%", maxWidth: isMobile ? "320px" : "672px", height: isMobile ? "220px" : "400px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "1.5rem" : "4rem", transform: isMobile ? "scale(0.65)" : undefined, transformOrigin: "center center" }}>
+      <div style={{ position: "relative", width: "100%", maxWidth: isMobile ? "100%" : "672px", height: isMobile ? "250px" : "400px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? "1.5rem" : "4rem", overflow: "hidden" }}>
 
         {/* Stage 1 — Document Scan */}
         <div className={currentStage === 1 ? "stage-active" : "stage-inactive"} style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", transition: "all 0.7s ease-in-out" }}>
