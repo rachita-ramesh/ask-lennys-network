@@ -2,6 +2,7 @@
 import Header from "@/components/Header";
 import PRDReviewLayout from "@/components/PRDReviewLayout";
 import AuthGate from "@/components/AuthGate";
+import Footer from "@/components/Footer";
 
 export default function ReviewPage() {
   return (
@@ -15,6 +16,7 @@ export default function ReviewPage() {
       }}>
         <Header />
         <PRDReviewLayout />
+        <Footer />
       </div>
     </AuthGate>
   );
