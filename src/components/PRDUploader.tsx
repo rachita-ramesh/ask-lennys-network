@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, DragEvent } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Props {
   onUpload: (file: File) => void;
@@ -9,6 +10,7 @@ interface Props {
 export default function PRDUploader({ onUpload, isLoading }: Props) {
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
 
   const handleFile = (file: File) => {
     const ext = file.name.split(".").pop()?.toLowerCase();
@@ -39,8 +41,8 @@ export default function PRDUploader({ onUpload, isLoading }: Props) {
       onClick={() => inputRef.current?.click()}
       style={{
         border: `2px dashed ${dragging ? "#D45D48" : "rgba(42, 49, 34, 0.2)"}`,
-        borderRadius: "24px",
-        padding: "4rem 2rem",
+        borderRadius: isMobile ? "16px" : "24px",
+        padding: isMobile ? "1.5rem 1.25rem" : "4rem 2rem",
         textAlign: "center",
         cursor: isLoading ? "not-allowed" : "pointer",
         background: dragging
@@ -50,6 +52,7 @@ export default function PRDUploader({ onUpload, isLoading }: Props) {
         maxWidth: "600px",
         margin: "0 auto",
         opacity: isLoading ? 0.6 : 1,
+        width: "100%",
       }}
     >
       <input
@@ -65,15 +68,15 @@ export default function PRDUploader({ onUpload, isLoading }: Props) {
       />
 
       <svg
-        width="48"
-        height="48"
+        width={isMobile ? 32 : 48}
+        height={isMobile ? 32 : 48}
         viewBox="0 0 24 24"
         fill="none"
         stroke="#5F6854"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        style={{ margin: "0 auto 1.5rem", opacity: 0.5 }}
+        style={{ margin: isMobile ? "0 auto 0.75rem" : "0 auto 1.5rem", opacity: 0.5 }}
       >
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <polyline points="14 2 14 8 20 8" />
@@ -85,27 +88,27 @@ export default function PRDUploader({ onUpload, isLoading }: Props) {
       <p
         style={{
           fontFamily: "var(--font-serif)",
-          fontSize: "1.5rem",
+          fontSize: isMobile ? "1.1rem" : "1.5rem",
           color: "#2A3122",
-          marginBottom: "0.75rem",
+          marginBottom: isMobile ? "0.375rem" : "0.75rem",
           fontWeight: 400,
         }}
       >
-        Drop your PRD here
+        {isMobile ? "Tap to upload your PRD" : "Drop your PRD here"}
       </p>
       <p
         style={{
-          fontSize: "0.9rem",
+          fontSize: isMobile ? "0.8rem" : "0.9rem",
           color: "#5F6854",
-          marginBottom: "1.5rem",
+          marginBottom: isMobile ? "0.75rem" : "1.5rem",
         }}
       >
-        or click to browse. Supports PDF and DOCX.
+        {isMobile ? "Supports PDF and DOCX." : "or click to browse. Supports PDF and DOCX."}
       </p>
       <span
         style={{
           fontFamily: "var(--font-mono)",
-          fontSize: "0.7rem",
+          fontSize: isMobile ? "0.6rem" : "0.7rem",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
           color: "#D45D48",

@@ -49,39 +49,41 @@ export default function PRDReviewLayout() {
           flexDirection: "column",
           alignItems: "center",
           flex: 1,
-          padding: "0 2rem",
+          padding: isMobile ? "0 1rem" : "0 2rem",
         }}
       >
-        <div style={{ textAlign: "center", marginBottom: "4rem", marginTop: "0" }}>
-          <span
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.75rem",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              color: "#D45D48",
-              marginBottom: "1.5rem",
-              display: "block",
-            }}
-          >
-            PRD Review
-          </span>
+        <div style={{ textAlign: "center", marginBottom: isMobile ? "1.5rem" : "4rem", marginTop: "0" }}>
+          {!isMobile && (
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.75rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                color: "#D45D48",
+                marginBottom: "1.5rem",
+                display: "block",
+              }}
+            >
+              PRD Review
+            </span>
+          )}
           <h1
             style={{
               fontFamily: "var(--font-serif)",
-              fontSize: "clamp(3.5rem, 6vw, 5.5rem)",
+              fontSize: isMobile ? "2rem" : "clamp(3.5rem, 6vw, 5.5rem)",
               fontWeight: 400,
               lineHeight: 1,
               letterSpacing: "-0.03em",
               color: "#2A3122",
-              marginBottom: "1.5rem",
+              marginBottom: isMobile ? "0.75rem" : "1.5rem",
             }}
           >
             <i style={{ fontStyle: "italic", paddingRight: "0.1em" }}>Sharpen</i> Your PRD
           </h1>
           <p
             style={{
-              fontSize: "1.125rem",
+              fontSize: isMobile ? "0.9rem" : "1.125rem",
               color: "#5F6854",
               fontFamily: "var(--font-sans)",
               maxWidth: "500px",
