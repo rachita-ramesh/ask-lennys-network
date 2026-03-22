@@ -2,6 +2,7 @@
 import { useState, useMemo } from "react";
 import { Person } from "@/lib/types";
 import Link from "next/link";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Props {
   people: Person[];
@@ -11,7 +12,7 @@ function initials(name: string): string {
   return name.split(" ").map((w) => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
 }
 
-function BrowsePersonCard({ person, delay }: { person: Person; delay: number }) {
+function BrowsePersonCard({ person, delay, compact }: { person: Person; delay: number; compact?: boolean }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -20,8 +21,8 @@ function BrowsePersonCard({ person, delay }: { person: Person; delay: number }) 
       style={{
         background: hovered ? "rgba(255,255,255,0.4)" : "transparent",
         border: `1px solid ${hovered ? "rgba(212, 93, 72, 0.6)" : "rgba(42, 49, 34, 0.15)"}`,
-        borderRadius: "16px",
-        padding: "2rem 1.5rem",
+        borderRadius: compact ? "12px" : "16px",
+        padding: compact ? "1.25rem 0.75rem" : "2rem 1.5rem",
         textAlign: "center",
         textDecoration: "none",
         display: "flex",
@@ -42,16 +43,16 @@ function BrowsePersonCard({ person, delay }: { person: Person; delay: number }) 
     >
       {/* Avatar */}
       <div style={{
-        width: "80px",
-        height: "80px",
+        width: compact ? "52px" : "80px",
+        height: compact ? "52px" : "80px",
         borderRadius: "50%",
         background: "linear-gradient(135deg, #E2E0D4, #C5C2B3)",
-        marginBottom: "1.25rem",
+        marginBottom: compact ? "0.75rem" : "1.25rem",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         fontFamily: "var(--font-serif)",
-        fontSize: "2rem",
+        fontSize: compact ? "1.25rem" : "2rem",
         color: "#5F6854",
         boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
         border: "2px solid #fff",
@@ -62,7 +63,7 @@ function BrowsePersonCard({ person, delay }: { person: Person; delay: number }) 
       {/* Name */}
       <h3 style={{
         fontFamily: "var(--font-serif)",
-        fontSize: "1.5rem",
+        fontSize: compact ? "1rem" : "1.5rem",
         color: "#2A3122",
         marginBottom: "0.25rem",
         lineHeight: 1.2,
@@ -72,11 +73,11 @@ function BrowsePersonCard({ person, delay }: { person: Person; delay: number }) 
 
       {/* Role */}
       <p style={{
-        fontSize: "0.875rem",
+        fontSize: compact ? "0.7rem" : "0.875rem",
         color: "#5F6854",
         fontFamily: "var(--font-sans)",
-        marginBottom: "1.5rem",
-        minHeight: "2.5em",
+        marginBottom: compact ? "0.75rem" : "1.5rem",
+        minHeight: compact ? "2em" : "2.5em",
         lineHeight: 1.4,
       }}>
         {person.title || "Expert"}
@@ -86,16 +87,16 @@ function BrowsePersonCard({ person, delay }: { person: Person; delay: number }) 
       <div style={{
         display: "flex",
         flexWrap: "wrap",
-        gap: "0.4rem",
+        gap: compact ? "0.25rem" : "0.4rem",
         justifyContent: "center",
         marginTop: "auto",
       }}>
-        {person.tags.slice(0, 3).map((tag) => (
+        {person.tags.slice(0, compact ? 2 : 3).map((tag) => (
           <span
             key={tag}
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: "0.65rem",
+              fontSize: compact ? "0.55rem" : "0.65rem",
               textTransform: "uppercase",
               color: hovered ? "#D45D48" : "#5F6854",
               padding: "0.2rem 0.6rem",
@@ -114,6 +115,7 @@ function BrowsePersonCard({ person, delay }: { person: Person; delay: number }) 
 }
 
 export default function PersonBrowser({ people }: Props) {
+  const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
   const [activeFilter, setActiveFilter] = useState("All");
@@ -236,8 +238,8 @@ export default function PersonBrowser({ people }: Props) {
       {/* Expert grid — 4 columns */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        gap: "1.5rem",
+        gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
+        gap: isMobile ? "0.75rem" : "1.5rem",
         marginBottom: "5rem",
       }}>
         {filtered.map((person, index) => (
@@ -245,6 +247,7 @@ export default function PersonBrowser({ people }: Props) {
             key={person.slug}
             person={person}
             delay={0.3 + index * 0.03}
+            compact={isMobile}
           />
         ))}
       </div>
