@@ -48,7 +48,10 @@ export default function PRDReviewLayout() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: isMobile ? "center" : undefined,
           flex: 1,
+          minHeight: 0,
+          overflow: "hidden",
           padding: isMobile ? "0 1rem" : "0 2rem",
         }}
       >
