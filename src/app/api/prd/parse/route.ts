@@ -273,7 +273,7 @@ function extractTitle(text: string, filename: string): string {
   }
 
   // Fall back to filename without extension
-  return filename.replace(/\.(pdf|docx)$/i, "");
+  return filename.replace(/\.docx$/i, "");
 }
 
 export async function POST(req: NextRequest) {
@@ -291,9 +291,9 @@ export async function POST(req: NextRequest) {
     const filename = file.name;
     const ext = filename.split(".").pop()?.toLowerCase();
 
-    if (!ext || !["pdf", "docx"].includes(ext)) {
+    if (ext !== "docx") {
       return NextResponse.json(
-        { error: "Only PDF and DOCX files are supported" },
+        { error: "Only DOCX files are supported" },
         { status: 400 }
       );
     }
@@ -302,17 +302,10 @@ export async function POST(req: NextRequest) {
     let rawText = "";
     const images: PRDImage[] = [];
 
-    if (ext === "pdf") {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const pdfParse = require("pdf-parse");
-      const data = await pdfParse(buffer);
-      rawText = data.text;
-    } else {
-      // Use convertToHtml to preserve headings, lists, bold/italic, etc.
-      const mammoth = await import("mammoth");
-      const result = await mammoth.convertToHtml({ buffer });
-      rawText = htmlToMarkdown(result.value, images);
-    }
+    // Use convertToHtml to preserve headings, lists, bold/italic, etc.
+    const mammoth = await import("mammoth");
+    const result = await mammoth.convertToHtml({ buffer });
+    rawText = htmlToMarkdown(result.value, images);
 
     if (!rawText.trim()) {
       return NextResponse.json(

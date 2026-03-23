@@ -14,8 +14,8 @@ export default function PRDUploader({ onUpload, isLoading }: Props) {
 
   const handleFile = (file: File) => {
     const ext = file.name.split(".").pop()?.toLowerCase();
-    if (ext !== "pdf" && ext !== "docx") {
-      alert("Please upload a PDF or DOCX file.");
+    if (ext !== "docx") {
+      alert("Please upload a DOCX file.");
       return;
     }
     onUpload(file);
@@ -58,7 +58,7 @@ export default function PRDUploader({ onUpload, isLoading }: Props) {
       <input
         ref={inputRef}
         type="file"
-        accept=".pdf,.docx"
+        accept=".docx"
         style={{ display: "none" }}
         onChange={(e) => {
           const file = e.target.files?.[0];
@@ -103,7 +103,7 @@ export default function PRDUploader({ onUpload, isLoading }: Props) {
           marginBottom: isMobile ? "0.75rem" : "1.5rem",
         }}
       >
-        {isMobile ? "Supports PDF and DOCX." : "or click to browse. Supports PDF and DOCX."}
+        {isMobile ? "Supports DOCX." : "or click to browse. Supports DOCX."}
       </p>
       <span
         style={{
