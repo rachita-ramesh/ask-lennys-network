@@ -303,6 +303,7 @@ export async function POST(req: NextRequest) {
     const images: PRDImage[] = [];
 
     if (ext === "pdf") {
+      // pdf-parse v1 — works on Node.js without canvas/DOMMatrix
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const pdfParse = require("pdf-parse");
       const data = await pdfParse(buffer);
