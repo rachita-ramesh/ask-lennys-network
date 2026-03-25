@@ -85,7 +85,7 @@ export default function LoginPage() {
           textAlign: "center",
           zIndex: 10,
           position: "relative",
-          paddingTop: isMobile ? "80px" : "32px",
+          paddingTop: isMobile ? "80px" : "80px",
         }}
       >
         <div
