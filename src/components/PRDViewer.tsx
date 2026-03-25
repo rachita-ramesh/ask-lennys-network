@@ -127,6 +127,7 @@ export default function PRDViewer({
                   remarkPlugins={[remarkGfm]}
                   components={{
                     img: ({ src, alt }) => {
+                      // Look up image by ID (e.g. "prd-img-0")
                       const img = typeof src === "string" ? imageMap.get(src) : null;
                       if (img) {
                         return (
@@ -134,7 +135,18 @@ export default function PRDViewer({
                           <img
                             src={img.src}
                             alt={img.alt || alt || ""}
-                            style={{ maxWidth: "100%", height: "auto", borderRadius: "8px", margin: "1rem 0" }}
+                            style={{ maxWidth: "100%", height: "auto", borderRadius: "8px", margin: "1rem 0", display: "block" }}
+                          />
+                        );
+                      }
+                      // Fallback: if src is already a data URI, render directly
+                      if (typeof src === "string" && src.startsWith("data:")) {
+                        return (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={src}
+                            alt={alt || ""}
+                            style={{ maxWidth: "100%", height: "auto", borderRadius: "8px", margin: "1rem 0", display: "block" }}
                           />
                         );
                       }
