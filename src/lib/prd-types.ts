@@ -13,11 +13,20 @@ export interface PRDImage {
   alt: string;
 }
 
+export interface PDFPageImage {
+  pageIndex: number;
+  imageDataUrl: string;
+  width: number;
+  height: number;
+}
+
 export interface ParsedPRD {
   title: string;
   sections: PRDSection[];
   rawText: string;
   images: PRDImage[];
+  sourceType: "pdf" | "docx";
+  pageImages?: PDFPageImage[];
 }
 
 export interface PRDComment {

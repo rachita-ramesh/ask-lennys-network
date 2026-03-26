@@ -220,6 +220,8 @@ export default function PRDReviewLayout() {
               sections={parsedPRD.sections}
               comments={allComments}
               images={parsedPRD.images || []}
+              sourceType={parsedPRD.sourceType}
+              pageImages={parsedPRD.pageImages}
               activeSectionId={activeSectionId}
               onSectionClick={(id) =>
                 setActiveSectionId(activeSectionId === id ? null : id)
@@ -246,6 +248,8 @@ export default function PRDReviewLayout() {
               sections={parsedPRD.sections}
               comments={allComments}
               images={parsedPRD.images || []}
+              sourceType={parsedPRD.sourceType}
+              pageImages={parsedPRD.pageImages}
               activeSectionId={activeSectionId}
               onSectionClick={(id) =>
                 setActiveSectionId(activeSectionId === id ? null : id)

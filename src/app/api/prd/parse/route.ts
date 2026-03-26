@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PRDSection, PRDImage, ParsedPRD } from "@/lib/prd-types";
+import { renderPDFPages } from "@/lib/pdf-renderer";
 
 /**
  * Convert HTML (from mammoth) to markdown, preserving headings, lists,
@@ -303,17 +304,49 @@ export async function POST(req: NextRequest) {
     const images: PRDImage[] = [];
 
     if (ext === "pdf") {
-      // pdf-parse v1 — works on Node.js without canvas/DOMMatrix
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const pdfParse = require("pdf-parse");
-      const data = await pdfParse(buffer);
-      rawText = data.text;
-    } else {
-      // Use convertToHtml to preserve headings, lists, bold/italic, etc.
-      const mammoth = await import("mammoth");
-      const result = await mammoth.convertToHtml({ buffer });
-      rawText = htmlToMarkdown(result.value, images);
+      // Render each page as JPEG + extract text per page
+      const pages = await renderPDFPages(buffer);
+
+      if (pages.length === 0) {
+        return NextResponse.json(
+          { error: "Could not read this PDF. It may be scanned or empty." },
+          { status: 422 }
+        );
+      }
+
+      rawText = pages.map((p) => p.text).join("\n\n");
+      const title = extractTitle(rawText, filename);
+
+      // Each page becomes a section
+      const sections: PRDSection[] = pages.map((p) => ({
+        id: `section-${p.pageIndex}`,
+        heading: `Page ${p.pageIndex + 1}`,
+        content: p.text,
+        index: p.pageIndex,
+      }));
+
+      const pageImages = pages.map((p) => ({
+        pageIndex: p.pageIndex,
+        imageDataUrl: p.imageDataUrl,
+        width: p.width,
+        height: p.height,
+      }));
+
+      const parsed: ParsedPRD = {
+        title,
+        sections,
+        rawText,
+        images: [],
+        sourceType: "pdf",
+        pageImages,
+      };
+      return NextResponse.json(parsed);
     }
+
+    // DOCX: use mammoth to preserve structure
+    const mammoth = await import("mammoth");
+    const result = await mammoth.convertToHtml({ buffer });
+    rawText = htmlToMarkdown(result.value, images);
 
     if (!rawText.trim()) {
       return NextResponse.json(
@@ -325,7 +358,7 @@ export async function POST(req: NextRequest) {
     const title = extractTitle(rawText, filename);
     const sections = splitIntoSections(rawText);
 
-    const parsed: ParsedPRD = { title, sections, rawText, images };
+    const parsed: ParsedPRD = { title, sections, rawText, images, sourceType: "docx" };
     return NextResponse.json(parsed);
   } catch (error: any) {
     console.error("PRD parse error:", error);
