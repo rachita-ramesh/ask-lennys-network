@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Chunk } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "public/data");
+const DATA_DIR = process.env.PRD_DATA_DIR || path.join(process.cwd(), "public/data");
 const CHUNKS_DIR = path.join(DATA_DIR, "chunks");
 
 export function loadChunksForPerson(slug: string): Chunk[] {

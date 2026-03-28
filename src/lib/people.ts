@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Person, PersonMeta } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "public/data");
+const DATA_DIR = process.env.PRD_DATA_DIR || path.join(process.cwd(), "public/data");
 
 let _people: Person[] | null = null;
 let _peopleMeta: PersonMeta[] | null = null;
