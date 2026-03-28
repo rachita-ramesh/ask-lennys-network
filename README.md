@@ -56,9 +56,69 @@ Users get 3 free PRD reviews. For unlimited use, users can provide their own Ant
 
 The PRD review system is also available as a set of [Model Context Protocol](https://modelcontextprotocol.io) tools, so you can use it from Claude Code or any MCP-compatible client.
 
-Available tools: `parse_prd`, `list_experts`, `select_experts`, `review_prd`, `reply_to_expert`
+### Install the MCP server
 
-To configure, copy `.mcp.json.example` to `.mcp.json` and update the paths.
+1. Clone this repo and install dependencies:
+
+   ```bash
+   git clone https://github.com/rachita-ramesh/ask-lennys-network.git
+   cd ask-lennys-network
+   npm install
+   ```
+
+2. Generate the expert data index (requires Lenny's content archive — see [DATA.md](DATA.md)):
+
+   ```bash
+   npm run build-index
+   ```
+
+3. Set your Anthropic API key:
+
+   ```bash
+   export ANTHROPIC_API_KEY=sk-ant-...
+   ```
+
+4. Add to your MCP client config. For **Claude Code**, add to your project's `.mcp.json`:
+
+   ```json
+   {
+     "mcpServers": {
+       "prd-reviewer": {
+         "command": "npx",
+         "args": ["tsx", "/absolute/path/to/ask-lennys-network/mcp-server/src/index.ts"],
+         "env": {
+           "ANTHROPIC_API_KEY": "sk-ant-..."
+         }
+       }
+     }
+   }
+   ```
+
+   For **Claude Desktop**, add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+
+   ```json
+   {
+     "mcpServers": {
+       "prd-reviewer": {
+         "command": "npx",
+         "args": ["tsx", "/absolute/path/to/ask-lennys-network/mcp-server/src/index.ts"],
+         "env": {
+           "ANTHROPIC_API_KEY": "sk-ant-..."
+         }
+       }
+     }
+   }
+   ```
+
+### Available tools
+
+| Tool | Description |
+|---|---|
+| `parse_prd` | Parse a PRD file (PDF, DOCX, TXT, MD) or raw text into structured sections |
+| `list_experts` | List all 297 experts with optional name/title/tag filtering |
+| `select_experts` | AI-powered selection of the 4 best reviewers for a given PRD |
+| `review_prd` | Get a full expert review with section-anchored comments |
+| `reply_to_expert` | Ask follow-up questions about specific review comments |
 
 ## Project Structure
 
