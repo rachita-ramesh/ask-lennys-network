@@ -1,3 +1,10 @@
 node_modules/
 .next/
 .env.local
+.env*.local
+.mcp.json
+.claude/
+tsconfig.tsbuildinfo
+
+# Generated data (derived from licensed content — see DATA.md)
+public/data/
