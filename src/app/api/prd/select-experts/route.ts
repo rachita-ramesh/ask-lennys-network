@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     const summary =
       words.length > 2000 ? words.slice(0, 2000).join(" ") + "..." : prdText;
 
-    const peopleMetaJson = getPeopleMetaString();
+    const peopleMetaJson = await getPeopleMetaString();
     const prompt = prdExpertSelectionPrompt(peopleMetaJson, title, summary);
 
     const claude = getClient(auth.apiKey);
@@ -46,13 +46,13 @@ export async function POST(req: NextRequest) {
 
     const suggestions = JSON.parse(jsonStr);
 
-    const enriched = suggestions
-      .map((s: { slug: string; reason: string }) => {
-        const person = getPersonBySlug(s.slug);
+    const enriched = (await Promise.all(
+      suggestions.map(async (s: { slug: string; reason: string }) => {
+        const person = await getPersonBySlug(s.slug);
         if (!person) return null;
         return { person, reason: s.reason };
       })
-      .filter(Boolean);
+    )).filter(Boolean);
 
     return NextResponse.json({ suggestions: enriched });
   } catch (error: any) {

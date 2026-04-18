@@ -11,22 +11,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const answerer = getPersonBySlug(answererSlug);
+    const answerer = await getPersonBySlug(answererSlug);
     if (!answerer) {
       return NextResponse.json({ error: "Answerer not found" }, { status: 404 });
     }
 
     // Build candidate info with chunks
-    const candidatesInfo = otherSlugs
-      .map((slug: string) => {
-        const person = getPersonBySlug(slug);
+    const candidatesInfo = (await Promise.all(
+      otherSlugs.map(async (slug: string) => {
+        const person = await getPersonBySlug(slug);
         if (!person) return "";
-        const chunks = getRelevantChunks(slug, question, 3000);
+        const chunks = await getRelevantChunks(slug, question, 3000);
         const text = chunks.map((c) => c.guestOnly || c.text).join("\n\n");
         return `## ${person.name} (${person.title})\nSlug: ${person.slug}\n${text}`;
       })
-      .filter(Boolean)
-      .join("\n\n===\n\n");
+    )).filter(Boolean).join("\n\n===\n\n");
 
     const prompt = dissentPrompt(answerSummary, answerer.name, candidatesInfo);
 
@@ -50,7 +49,7 @@ export async function POST(req: NextRequest) {
     }
 
     const parsed = JSON.parse(jsonStr);
-    const dissenterPerson = getPersonBySlug(parsed.dissenterSlug);
+    const dissenterPerson = await getPersonBySlug(parsed.dissenterSlug);
 
     return NextResponse.json({
       dissent: dissenterPerson

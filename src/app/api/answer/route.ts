@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const person = getPersonBySlug(personSlug);
+    const person = await getPersonBySlug(personSlug);
     if (!person) {
       return new Response(JSON.stringify({ error: "Person not found" }), {
         status: 404,
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const chunks = getRelevantChunks(personSlug, question);
+    const chunks = await getRelevantChunks(personSlug, question);
     const chunksText = chunks
       .map((c) => `[From: ${c.sourceTitle} (${c.sourceDate})]\n${c.guestOnly || c.text}`)
       .join("\n\n---\n\n");

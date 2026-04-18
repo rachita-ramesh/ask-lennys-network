@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const person = getPersonBySlug(personSlug);
+    const person = await getPersonBySlug(personSlug);
     if (!person) {
       return new Response(JSON.stringify({ error: "Person not found" }), {
         status: 404,
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
 
     // Build a search query from the PRD title + first section content
     const searchQuery = `${prdTitle} ${sections.slice(0, 3).map((s) => s.content).join(" ")}`.slice(0, 500);
-    const chunks = getRelevantChunks(personSlug, searchQuery, 4000);
+    const chunks = await getRelevantChunks(personSlug, searchQuery, 4000);
     const chunksText = chunks
       .map(
         (c) =>

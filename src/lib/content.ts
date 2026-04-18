@@ -1,20 +1,28 @@
-import fs from "fs";
-import path from "path";
+import { supabase } from "./supabase";
 import { Chunk } from "./types";
 
-const DATA_DIR = process.env.PRD_DATA_DIR || path.join(process.cwd(), "public/data");
-const CHUNKS_DIR = path.join(DATA_DIR, "chunks");
+function rowToChunk(row: Record<string, unknown>): Chunk {
+  return {
+    personSlug: row.person_slug as string,
+    personName: row.person_name as string,
+    chunkIndex: row.chunk_index as number,
+    sourceTitle: row.source_title as string,
+    sourceType: row.source_type as "podcast" | "newsletter",
+    sourceDate: row.source_date as string,
+    text: row.text as string,
+    guestOnly: row.guest_only as string,
+    wordCount: row.word_count as number,
+  };
+}
 
-export function loadChunksForPerson(slug: string): Chunk[] {
-  const chunks: Chunk[] = [];
-  let i = 0;
-  while (true) {
-    const filePath = path.join(CHUNKS_DIR, `${slug}-${i}.json`);
-    if (!fs.existsSync(filePath)) break;
-    chunks.push(JSON.parse(fs.readFileSync(filePath, "utf-8")));
-    i++;
-  }
-  return chunks;
+export async function loadChunksForPerson(slug: string): Promise<Chunk[]> {
+  const { data, error } = await supabase
+    .from("chunks")
+    .select("*")
+    .eq("person_slug", slug)
+    .order("chunk_index", { ascending: true });
+  if (error) throw new Error(`Failed to load chunks: ${error.message}`);
+  return (data || []).map(rowToChunk);
 }
 
 const STOP_WORDS = new Set([
@@ -52,8 +60,8 @@ export function scoreChunkRelevance(chunk: Chunk, question: string): number {
   return score;
 }
 
-export function getRelevantChunks(slug: string, question: string, maxWords: number = 8000): Chunk[] {
-  const chunks = loadChunksForPerson(slug);
+export async function getRelevantChunks(slug: string, question: string, maxWords: number = 8000): Promise<Chunk[]> {
+  const chunks = await loadChunksForPerson(slug);
   const scored = chunks.map((c) => ({ chunk: c, score: scoreChunkRelevance(c, question) }));
   scored.sort((a, b) => b.score - a.score);
 
@@ -64,7 +72,6 @@ export function getRelevantChunks(slug: string, question: string, maxWords: numb
     result.push(chunk);
     totalWords += chunk.wordCount;
   }
-  // Re-sort by chunk index for narrative order
   result.sort((a, b) => a.chunkIndex - b.chunkIndex);
   return result;
 }

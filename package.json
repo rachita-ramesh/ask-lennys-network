@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "build-index": "npx tsx scripts/build-index.ts"
+    "build-index": "npx tsx scripts/build-index.ts",
+    "upload-data": "npx tsx scripts/upload-to-supabase.ts"
   },
   "keywords": ["prd", "product-review", "ai", "claude", "nextjs", "mcp"],
   "author": "Rachita",

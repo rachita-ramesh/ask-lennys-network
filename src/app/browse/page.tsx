@@ -1,20 +1,12 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PersonBrowser from "@/components/PersonBrowser";
-import { Person } from "@/lib/types";
-import fs from "fs";
-import path from "path";
+import { getAllPeople } from "@/lib/people";
 
-async function getPeople(): Promise<Person[]> {
-  const data = fs.readFileSync(
-    path.join(process.cwd(), "public/data/people.json"),
-    "utf-8"
-  );
-  return JSON.parse(data);
-}
+export const dynamic = "force-dynamic";
 
 export default async function BrowsePage() {
-  const people = await getPeople();
+  const people = await getAllPeople();
 
   return (
     <div style={{

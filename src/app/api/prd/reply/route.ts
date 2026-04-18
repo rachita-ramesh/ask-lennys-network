@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const person = getPersonBySlug(personSlug);
+    const person = await getPersonBySlug(personSlug);
     if (!person) {
       return new Response(JSON.stringify({ error: "Person not found" }), {
         status: 404,
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const chunks = getRelevantChunks(personSlug, sectionContent, 3000);
+    const chunks = await getRelevantChunks(personSlug, sectionContent, 3000);
     const chunksText = chunks
       .map(
         (c) =>

@@ -1,20 +1,11 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Person } from "@/lib/types";
-import fs from "fs";
-import path from "path";
+import { getPersonBySlug } from "@/lib/people";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PersonQuestion from "./PersonQuestion";
 
-async function getPerson(slug: string): Promise<Person | undefined> {
-  const data = fs.readFileSync(
-    path.join(process.cwd(), "public/data/people.json"),
-    "utf-8"
-  );
-  const people: Person[] = JSON.parse(data);
-  return people.find((p) => p.slug === slug);
-}
+export const dynamic = "force-dynamic";
 
 function avatarColor(name: string): string {
   let hash = 0;
@@ -34,7 +25,7 @@ export default async function PersonPage({
 }: {
   params: { slug: string };
 }) {
-  const person = await getPerson(params.slug);
+  const person = await getPersonBySlug(params.slug);
   if (!person) notFound();
 
   return (
