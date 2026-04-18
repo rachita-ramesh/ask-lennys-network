@@ -15,7 +15,6 @@ export default function Footer() {
         gap: "0.375rem",
         flexShrink: 0,
         marginTop: "auto",
-        borderTop: "1px solid rgba(42, 49, 34, 0.08)",
       }}
     >
       <span

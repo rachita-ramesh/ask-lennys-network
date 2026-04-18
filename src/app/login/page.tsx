@@ -173,8 +173,6 @@ export default function LoginPage() {
           style={{
             width: "100%",
             marginTop: "3rem",
-            paddingTop: "1.5rem",
-            borderTop: "1px solid rgba(42, 49, 34, 0.1)",
           }}
         >
           <div
